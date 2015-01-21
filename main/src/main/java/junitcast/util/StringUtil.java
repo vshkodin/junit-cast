@@ -27,7 +27,7 @@ public class StringUtil {
      * 
      * @param array String array to trim contents.
      */
-    public String[] trimArray(final String[] array)
+    public String[] trimArray(final String... array)
     {
         String[] retval = null; //NOPMD: null default, conditionally redefine.
         if (array != null) {

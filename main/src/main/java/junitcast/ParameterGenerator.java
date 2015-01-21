@@ -182,7 +182,7 @@ public class ParameterGenerator<T> {
         final Rule rule = fixture.getRule();
 
         String retval = null; //NOPMD: null default, conditionally redefine.
-        final boolean[] ruleResult = new RuleProcessor<T>().evaluate(
+        final Boolean[] ruleResult = new RuleProcessor<T>().evaluate(
             scenario,
             fixture);
 

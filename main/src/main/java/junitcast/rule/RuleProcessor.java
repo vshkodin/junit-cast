@@ -15,6 +15,7 @@
  */
 package junitcast.rule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import junitcast.CaseFixture;
@@ -30,34 +31,37 @@ public class RuleProcessor<T> {
      * @param scenario current scenario.
      * @param caseFixture current test case fixture.
      */
-    public boolean[] evaluate(final List<T> scenario, final CaseFixture<T> caseFixture)
+    public Boolean[] evaluate(final List<T> scenario,
+            final CaseFixture<T> caseFixture)
     {
         if (scenario == null || caseFixture == null) {
-            throw new IllegalArgumentException("Scenario or fixture cannot be null.");
+            throw new IllegalArgumentException(
+                "Scenario or fixture cannot be null.");
         }
+
         final Rule rule = caseFixture.getRule();
-
-        final int size = rule.getActionList().size();
-        final boolean[] retval = new boolean[size];
-
-        int counter = 0;
-
-        final RuleEvaluator<T> ruleEvaluator = getRuleEvaluator(caseFixture.getConverters());
+        final List<Boolean> retval = new ArrayList<Boolean>();
         for (final String action : rule.getActionList()) {
+
             final String ruleClause = rule.getRuleClause(action);
 
+            final RuleEvaluator<T> ruleEvaluator = getRuleEvaluator(caseFixture
+                .getConverters());
+
             ruleEvaluator.parse(ruleClause);
-            retval[counter] = ruleEvaluator.evaluate(scenario, caseFixture.getRuleConverter());
-            counter++;
+            retval.add(ruleEvaluator.evaluate(
+                scenario,
+                caseFixture.getRuleConverter()));
         }
 
-        return retval;
+        return retval.toArray(new Boolean[retval.size()]);
     }
 
     /**
      * @param elementConverter List of element converters for this case.
      */
-    RuleEvaluator<T> getRuleEvaluator(final List<ElementConverter> elementConverter)
+    RuleEvaluator<T> getRuleEvaluator(
+            final List<ElementConverter> elementConverter)
     {
         return new RuleEvaluator<T>(elementConverter);
     }

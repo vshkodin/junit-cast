@@ -42,24 +42,26 @@ public class SetMerger<E> {
      * NOTICE: Thanks to original author is Sebastien Boutte.<br/>
      * <br/>
      * 
-     * @param pSet set of set of Objects to count. Must not be null, empty, or contain null or empty element.
+     * @param pListOfSet List of Set of Objects to count. Must not be null,
+     *            empty, or contain null or empty element.
      */
-    int getMergeCount(final List<Set<E>> pSet)
+    int getMergeCount(final List<Set<E>> pListOfSet)
     {
-        final IllegalArgumentException iae = new IllegalArgumentException(
-                "Parameter and any of its element must not be null nor empty. ");
-        if (pSet == null || pSet.contains(null) || pSet.isEmpty()) {
-            throw iae;
+        if (pListOfSet == null || pListOfSet.contains(null)
+                || pListOfSet.isEmpty()) {
+            throw new IllegalArgumentException(
+                "List must not be null, empty, or contain null set. ");
         }
-        int count = 1;
-        for (final Set<E> nextSet : pSet) {
+        int mergeSize = 1; //NOPMD: init default, conditionally redefine.
+        for (final Set<E> nextSet : pListOfSet) {
             if (nextSet.contains(null) || nextSet.isEmpty()) {
-                throw iae;
+                throw new IllegalArgumentException(
+                    "List Set must not be empty or contain null element. ");
             } else {
-                count = count * nextSet.size();
+                mergeSize = mergeSize * nextSet.size();
             }
         }
-        return count;
+        return mergeSize;
     }
 
     /**
@@ -80,7 +82,8 @@ public class SetMerger<E> {
         // First combination is always valid
         final List<E> combination = new ArrayList<E>();
         for (int i = 0; i < index.length; i++) {
-            combination.add((E) ((Set<List<E>>) uncombinedSet.toArray()[i]).toArray()[index[i]]);
+            combination.add((E) ((Set<List<E>>) uncombinedSet.toArray()[i])
+                .toArray()[index[i]]);
         }
 
         mergedList.add(combination);
@@ -95,8 +98,11 @@ public class SetMerger<E> {
      * @param mergeMaxIdx max index of list to merge.
      * @param <T> element type.
      */
-    @SuppressWarnings("unchecked")
-    <T> void combineSuceeding(final List<Set<T>> uncombinedSet, final Set<List<T>> mergedList, final int[] index,
+    @SuppressWarnings({
+            "unchecked",
+            "PMD.AvoidInstantiatingObjectsInLoops" })
+    <T> void combineSuceeding(final List<Set<T>> uncombinedSet,
+            final Set<List<T>> mergedList, final int[] index,
             final int mergeMaxIdx)
     {
         List<T> combination;
@@ -105,7 +111,8 @@ public class SetMerger<E> {
             boolean found = false;
             // We Use reverse order
             for (int j = index.length - 1; j >= 0 && !found; j--) {
-                final int currentListSize = ((Set<Set<T>>) uncombinedSet.toArray()[j]).size();
+                final int currentListSize = ((Set<Set<T>>) uncombinedSet
+                    .toArray()[j]).size();
                 if (index[j] < currentListSize - 1) {
                     index[j] = index[j] + 1;
                     found = true;
@@ -114,7 +121,8 @@ public class SetMerger<E> {
                 }
             }
             for (int j = 0; j < index.length; j++) {
-                combination.add((T) ((Set<Set<T>>) uncombinedSet.toArray()[j]).toArray()[index[j]]);
+                combination.add((T) ((Set<Set<T>>) uncombinedSet.toArray()[j])
+                    .toArray()[index[j]]);
             }
             mergedList.add(combination);
         }
