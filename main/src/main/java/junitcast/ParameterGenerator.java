@@ -84,10 +84,10 @@ public class ParameterGenerator<T> {
      * @param fixTureList list of test cases.
      */
     public Collection<Object[]> generateData(
-        final List<CaseFixture<T>> fixTureList)
-        {
+            final List<CaseFixture<T>> fixTureList)
+    {
         return generateData(fixTureList, true);
-        }
+    }
 
 
     /**
@@ -97,8 +97,8 @@ public class ParameterGenerator<T> {
      */
     @SuppressWarnings(Constant.Warning.UNCHECKED)
     public Collection<Object[]> generateData(
-        final List<CaseFixture<T>> fixTureList, final boolean isComputed)
-        {
+            final List<CaseFixture<T>> fixTureList, final boolean isComputed)
+    {
         final List<Object[]> retval = new ArrayList<Object[]>();
         for (final CaseFixture<T> caseFixture : fixTureList) {
             if (isComputed) {
@@ -110,6 +110,7 @@ public class ParameterGenerator<T> {
         Collections.sort(retval, new Comparator<Object[]>() {
 
             @Override
+            @SuppressWarnings("PMD.UseVarargs")
             public int compare(final Object[] paramArr1,
                     final Object[] paramArr2)
             {
@@ -119,7 +120,7 @@ public class ParameterGenerator<T> {
             }
         });
         return retval;
-        }
+    }
 
     /**
      * Add a case in a parameterized test case.
@@ -138,7 +139,7 @@ public class ParameterGenerator<T> {
             if (isValidCase(scenario, caseFixture)) {
                 final String result = validateRule(scenario, caseFixture);
                 paramCollection
-                .add(new Object[] { new Parameter<T>(caseFixture //NOPMD: False positive.
+                    .add(new Object[] { new Parameter<T>(caseFixture //NOPMD: False positive.
                         .getCaseDesc(), scenario, result, caseFixture
                         .getCaseId()) });
             }
@@ -162,8 +163,8 @@ public class ParameterGenerator<T> {
 
             final String result = validateRule((List<T>) scenList, caseFixture);
             paramCollection.add(new Object[] { new Parameter<T>(caseFixture //NOPMD: False positive.
-                    .getCaseDesc(), (List<T>) scenList, result, caseFixture
-                    .getCaseId()) });
+                .getCaseDesc(), (List<T>) scenList, result, caseFixture
+                .getCaseId()) });
         }
     }
 
@@ -192,10 +193,10 @@ public class ParameterGenerator<T> {
             retval = getBinaryOutput(action, fixture, nextResult);
         } else {
             final Set<String> matchedOutputs = new HashSet<String>();
-            int matchCount = 0;
+            int matchCount = 0; //NOPMD: counter, redefined inside loop.
             for (int i = 0; i < ruleResult.length; i++) {
                 if (ruleResult[i]) {
-                    matchCount++;
+                    matchCount++; //NOPMD: counter, redefined inside loop.
                     retval = rule.getActionList().get(i);
                     matchedOutputs.add(retval);
                 }
@@ -204,8 +205,8 @@ public class ParameterGenerator<T> {
             Assert.assertEquals(
                 "Scenario must fall into a unique rule output/clause: "
                         + scenario + ", matched: " + matchedOutputs,
-                        1,
-                        matchCount);
+                1,
+                matchCount);
         }
         return retval;
     }
@@ -258,21 +259,22 @@ public class ParameterGenerator<T> {
      * @param scenario current Test scenario.
      * @param fixture test case fixture.
      */
+    @SuppressWarnings("PMD.BooleanInversion")
     private boolean isValidCase(final List<T> scenario,
             final CaseFixture<T> fixture)
     {
-        boolean retval;
+        boolean valid;
         if (fixture.getExemptRule() == null) {
-            retval = true;
+            valid = true;
         } else {
             final String exemptRule = fixture.getExemptRule();
             final RuleEvaluator<T> ruleEvaluator = new RuleEvaluator<T>(
-                    fixture.getConverters());
+                fixture.getConverters());
             ruleEvaluator.parse(exemptRule);
-            retval = !ruleEvaluator.evaluate(
+            valid = !ruleEvaluator.evaluate(
                 scenario,
                 fixture.getRuleConverter()); //NOPMD: False positive.
         }
-        return retval;
+        return valid;
     }
 }

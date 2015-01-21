@@ -15,6 +15,7 @@
  */
 package junitcast.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +24,7 @@ import junitcast.AbstractTransientValueTestCase;
 import junitcast.MockitoHelper;
 import junitcast.Parameter;
 import junitcast.ParameterGenerator;
+import junitcast.ScenarioSource;
 
 import org.junit.Assert;
 import org.junit.runners.Parameterized.Parameters;
@@ -65,7 +67,7 @@ public class StringUtilTest extends
     public static Collection<Object[]> generateData()
     {
         return new ParameterGenerator<String>()
-                .genVarData("junitcast.util.StringUtilTest");
+            .genVarData("junitcast.util.StringUtilTest");
     }
 
     @Override
@@ -74,11 +76,11 @@ public class StringUtilTest extends
         Object retval = null; //NOPMD: null default, conditionally redefine.
         try {
             final Object result = getRealSubject()
-                    .getClass()
-                    .getDeclaredMethod(getParameter().getIdentifier().get(0),
-                            new Class[] { String[].class })
-                    .invoke(getMockSubject(),
-                            new Object[] { getTransientValue(0) });
+                .getClass()
+                .getDeclaredMethod(
+                    getParameter().getIdentifier().get(0),
+                    new Class[] { String[].class })
+                .invoke(getMockSubject(), new Object[] { getTransientValue(0) });
             if (result == null) {
                 retval = "null";
             } else {
@@ -86,11 +88,21 @@ public class StringUtilTest extends
                 if (arr.length == 0) {
                     retval = "empty";
                 } else {
-                    retval = Arrays.asList((String[]) result).toString()
-                            .replaceAll(", ", "-");
+                    retval = Arrays
+                        .asList((String[]) result)
+                        .toString()
+                        .replaceAll(", ", "-");
                 }
             }
-        } catch (final Exception e) {
+        } catch (final IllegalArgumentException e) {
+            Assert.fail(e.getMessage());
+        } catch (final SecurityException e) {
+            Assert.fail(e.getMessage());
+        } catch (final IllegalAccessException e) {
+            Assert.fail(e.getMessage());
+        } catch (final InvocationTargetException e) {
+            Assert.fail(e.getMessage());
+        } catch (final NoSuchMethodException e) {
             Assert.fail(e.getMessage());
         }
         return retval;
@@ -100,36 +112,24 @@ public class StringUtilTest extends
     @Override
     protected void prepare()
     {
-        for (final String scenarioToken : getParameter().getScenario()) {
-            final Variable currentVar = Variable.valueOf(scenarioToken
-                    .replaceAll(" ", "_"));
+        final ScenarioSource<String> source = new ScenarioSource<String>(this);
 
-            switch (currentVar) {
-                case null_array:
-                    setTransientValue(0, null);
-                    break;
-                case empty:
-                    setTransientValue(0, new String[0]);
-                    break;
-                case normal:
-                    setTransientValue(0, new String[] {
-                            " a",
-                            " b ",
-                            "         c                       ",
-                            "d" });
-                    break;
-                case null_item:
-                    setTransientValue(0, new String[] {
-                            " a",
-                            "b ",
-                            " c                       ",
-                            null });
-                    break;
-                default:
-                    break;
-            }
+        source.addTransientCase(0, null, Variable.null_array);
+        source.addTransientCase(0, new String[0], Variable.empty);
 
-        }
+        source.addTransientCase(0, new String[] {
+                " a",
+                " b ",
+                "         c                       ",
+                "d" }, Variable.normal);
+
+        source.addTransientCase(0, new String[] {
+                " a",
+                "b ",
+                " c                       ",
+                null }, Variable.null_item);
+
+        source.notifyObservers();
     }
 
 }

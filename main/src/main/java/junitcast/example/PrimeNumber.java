@@ -29,21 +29,19 @@ public class PrimeNumber {
      */
     public boolean isPrimeNumber(final int input)
     {
-        boolean retval = true; //NOPMD: true default, conditionally redefine.
+        boolean primeYes = true; //NOPMD: true default, conditionally redefine.
         if (input <= 0) {
             throw new IllegalArgumentException("Invalid number: " + input);
         } else if (input > 2) {
+
             for (int i = 2; i < input; i++) {
-                if (input % i == 0) {
-                    retval = false;
+                primeYes = input % i != 0;
+                if (!primeYes) {
                     break;
-                }
-                if (input % i != 0) {
-                    retval = true;
                 }
             }
         }
-        return retval;
+        return primeYes;
     }
 
 }

@@ -98,10 +98,10 @@ public class ScenarioSource<S> {
      * @param cases applicable Variable cases.
      * 
      * @param <C> case enum.
-     * @param <T> transient enum.
+     * @param <T> transient key.
      */
-    public <C extends Enum<C>, T extends Enum<T>> void addTransientCase(
-            final T key, final CaseParser caseParser, final C... cases)
+    public <C extends Enum<C>, T> void addTransientCase(final T key,
+            final CaseParser caseParser, final C... cases)
     {
         addTransientCase(key, (Object) caseParser, cases);
     }
@@ -114,10 +114,10 @@ public class ScenarioSource<S> {
      * @param cases applicable Variable cases.
      * 
      * @param <C> case enum.
-     * @param <T> transient enum.
+     * @param <T> transient key.
      */
-    public <C extends Enum<C>, T extends Enum<T>> void addTransientCaseName(
-            final T key, final C... cases)
+    public <C extends Enum<C>, T> void addTransientCaseName(final T key,
+            final C... cases)
     {
         checkValidTestCase(cases);
         for (final C nextCase : cases) {
@@ -134,10 +134,10 @@ public class ScenarioSource<S> {
      * @param cases applicable Variable cases.
      * 
      * @param <C> case enum.
-     * @param <T> transient enum.
+     * @param <T> transient key.
      */
-    public <C extends Enum<C>, T extends Enum<T>> void addTransientCase(
-            final T key, final Object value, final C... cases)
+    public <C extends Enum<C>, T> void addTransientCase(final T key,
+            final Object value, final C... cases)
     {
         assert cases != null;
         assert cases.length > 0;
@@ -146,8 +146,8 @@ public class ScenarioSource<S> {
         }
     }
 
-    <T extends Enum<T>, C extends Enum<C>> CaseObserver<S> createNewCase(
-            final C nextCase, final T key, final Object value)
+    <T, C extends Enum<C>> CaseObserver<S> createNewCase(final C nextCase,
+            final T key, final Object value)
     {
         return new CaseObserver<S>() {
 
