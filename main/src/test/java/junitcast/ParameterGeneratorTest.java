@@ -36,8 +36,8 @@ import org.mockito.Mockito;
  * @author Royce Remulla
  */
 public class ParameterGeneratorTest
-extends
-AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
+        extends
+        AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
 
 
     /** Test artifact. */
@@ -64,14 +64,14 @@ AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
     }
 
     /** */
-    private enum Variable {
+    enum Variable {
 
         /** */
         Init, Negative, Positive, Matched_Expected, Missed_Expected
     }
 
     /** */
-    private enum Trans {
+    enum Trans {
 
         /** */
         Output, Fixture, Expected, Pair
@@ -91,7 +91,7 @@ AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
         final List<CaseFixture<String>> fixTureList = new ArrayList<CaseFixture<String>>();
         final List<Set<String>> variables = new ArrayList<Set<String>>();
         variables.add(new LinkedHashSet<String>(Arrays
-                .asList(new String[] { Variable.Init.name() })));
+            .asList(new String[] { Variable.Init.name() })));
         variables.add(new LinkedHashSet<String>(Arrays.asList(new String[] {
                 Variable.Negative.name(),
                 Variable.Positive.name() })));
@@ -100,19 +100,19 @@ AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
                 Variable.Missed_Expected.name() })));
 
         final StringBuilder ruleBuilder = new StringBuilder()
-        .append(TEST_NEG)
-        .append(':')
-        .append(
-            Variable.Negative.name() + '&'
-            + Variable.Matched_Expected.name())
+            .append(TEST_NEG)
+            .append(':')
+            .append(
+                Variable.Negative.name() + '&'
+                        + Variable.Matched_Expected.name())
             .append('|');
         ruleBuilder.append(Variable.Positive.name() + '&'
-            + Variable.Missed_Expected.name());
+                + Variable.Missed_Expected.name());
         fixTureList.add(new CaseFixture<String>(
-                "getBinaryAction",
-                variables,
-                new Rule(ruleBuilder.toString()),
-                TEST_PAIR));
+            "getBinaryAction",
+            variables,
+            new Rule(ruleBuilder.toString()),
+            TEST_PAIR));
 
         return new ParameterGenerator<String>().generateData(fixTureList);
     }
@@ -121,63 +121,51 @@ AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
     @Override
     protected void prepare()
     {
+        final ScenarioSource<Object> source = new ScenarioSource<Object>(this);
 
-        for (final Object scenarioToken : getParameter().getScenario()) {
-            final Variable variable = Variable.valueOf(scenarioToken
-                .toString()
-                .replaceAll(" ", "_"));
-            switch (variable) {
-                case Init:
-                    @SuppressWarnings("unchecked")
-                    final CaseFixture<String> mockFixture = Mockito
+        source.addObserver(Variable.Init, new CaseObserver<Object>() {
+
+            @Override
+            public void prepareCase(final Object caseRaw)
+            {
+                @SuppressWarnings("unchecked")
+                final CaseFixture<String> mockFixture = Mockito
                     .mock(CaseFixture.class);
 
-                    //blech!
-                    final String[] pairArr = TEST_PAIR.split(":");
-                    final Map<String, String> pairMap = new HashMap<String, String>();
-                    pairMap.put(pairArr[0], pairArr[1]);
-                    final Map<String, String> reverse = new HashMap<String, String>();
-                    reverse.put(pairArr[1], pairArr[0]);
-                    Mockito.doReturn(pairMap).when(mockFixture).getPairMap();
-                    Mockito
-                    .doReturn(reverse)
+                final String[] pairArr = TEST_PAIR.split(":");
+                final Map<String, String> pairMap = new HashMap<String, String>();
+                pairMap.put(pairArr[0], pairArr[1]);
+                final Map<String, String> reversePairMap = new HashMap<String, String>();
+                reversePairMap.put(pairArr[1], pairArr[0]);
+
+                Mockito.doReturn(pairMap).when(mockFixture).getPairMap();
+                Mockito
+                    .doReturn(reversePairMap)
                     .when(mockFixture)
                     .getReversePairMap();
-                    setTransientValue(Trans.Fixture.ordinal(), mockFixture);
-                    break;
-
-                case Negative:
-                    setTransientValue(Trans.Output.ordinal(), TEST_NEG);
-                    break;
-                case Positive:
-                    setTransientValue(Trans.Output.ordinal(), TEST_POS);
-                    break;
-                case Matched_Expected:
-                    setTransientValue(Trans.Expected.ordinal(), true);
-                    break;
-                case Missed_Expected:
-                    setTransientValue(Trans.Expected.ordinal(), false);
-                    break;
-                default:
-
-                    break;
+                setTransientValue(Trans.Fixture, mockFixture);
             }
+        });
 
-        }
 
+        //@formatter:off 
+        source.addTransientCase(Trans.Output, TEST_NEG, Variable.Negative);
+        source.addTransientCase(Trans.Output, TEST_POS, Variable.Positive);
+        source.addTransientCase(Trans.Expected, true, Variable.Matched_Expected);
+        source.addTransientCase(Trans.Expected, false, Variable.Missed_Expected);
+        //@formatter:on 
+
+        source.notifyObservers();
     }
 
     /** {@inheritDoc} */
     @Override
     protected Object execute()
     {
-        final String ruleOutput = (String) getTransientValue(Trans.Output
-            .ordinal());
+        final String ruleOutput = (String) getTransientValue(Trans.Output);
         @SuppressWarnings("unchecked")
-        final CaseFixture<String> fixture = (CaseFixture<String>) getTransientValue(Trans.Fixture
-            .ordinal());
-        final boolean expected = (Boolean) getTransientValue(Trans.Expected
-            .ordinal());
+        final CaseFixture<String> fixture = (CaseFixture<String>) getTransientValue(Trans.Fixture);
+        final boolean expected = (Boolean) getTransientValue(Trans.Expected);
 
         return getMockSubject().getBinaryOutput(ruleOutput, fixture, expected);
     }

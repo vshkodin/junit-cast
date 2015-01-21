@@ -15,6 +15,7 @@
  */
 package junitcast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +34,7 @@ import org.junit.runners.Parameterized.Parameters;
  * @author Royce Remulla
  */
 public class ParameterTest extends
-AbstractTransientValueTestCase<Parameter<String>, String, Object> {
+        AbstractTransientValueTestCase<Parameter<String>, String, Object> {
 
     /**
      * @param pParameter Data Transfer Object Parameter.
@@ -47,25 +48,20 @@ AbstractTransientValueTestCase<Parameter<String>, String, Object> {
     {
         prepare();
         try {
-            new MockitoHelper()
-            .setupTargetObject(
+            new MockitoHelper().setupTargetObject(
                 this,
                 Arrays.asList(new Object[] {
-                        getTransientValue(ConstrutorParameter.CaseDesc
-                            .ordinal()),
-                            getTransientValue(ConstrutorParameter.Scenario
-                                .ordinal()),
-                                getTransientValue(ConstrutorParameter.Result
-                                    .ordinal()),
-                                    getTransientValue(ConstrutorParameter.Identifier
-                                        .ordinal()) }));
+                        getTransientValue(ConstructorParameter.CaseDesc),
+                        getTransientValue(ConstructorParameter.Scenario),
+                        getTransientValue(ConstructorParameter.Result),
+                        getTransientValue(ConstructorParameter.Identifier) }));
         } catch (final JUnitCastException iae) {
             setResult("ERROR");
         }
     }
 
     /** Test subject constructor parameter indices. */
-    enum ConstrutorParameter {
+    enum ConstructorParameter {
         /** */
         CaseDesc,
         /** */
@@ -77,7 +73,7 @@ AbstractTransientValueTestCase<Parameter<String>, String, Object> {
     }
 
     /** List of variables that affect the test subject. */
-    enum Variable1 {
+    enum Variable {
 
         /** */
         null_case_desc,
@@ -121,57 +117,50 @@ AbstractTransientValueTestCase<Parameter<String>, String, Object> {
     public static Collection<Object[]> generateData()
     {
         return new ParameterGenerator<String>()
-                .genVarData("junitcast.ParameterTest");
+            .genVarData("junitcast.ParameterTest");
     }
 
     /** {@inheritDoc} */
     @Override
     protected void prepare()
     {
-        for (final String scenarioToken : getParameter().getScenario()) {
-            final Variable1 currentVar = Variable1.valueOf(scenarioToken
-                .replaceAll(" ", "_"));
+        final ScenarioSource<String> source = new ScenarioSource<String>(this);
 
-            switch (currentVar) {
+        source.addTransientCaseName(
+            ConstructorParameter.CaseDesc,
+            Variable.has_case_desc);
 
-                case has_case_desc:
-                    setTransientValue(
-                        ConstrutorParameter.CaseDesc.ordinal(),
-                        scenarioToken);
-                    break;
-                case empty_scenario:
-                    setTransientValue(
-                        ConstrutorParameter.Scenario.ordinal(),
-                        Arrays.asList(new String[0]));
-                    break;
-                case one_scenario:
-                    setTransientValue(
-                        ConstrutorParameter.Scenario.ordinal(),
-                        Arrays.asList(new String[] { "scen1" }));
-                    break;
-                case three_scenario:
-                    setTransientValue(
-                        ConstrutorParameter.Scenario.ordinal(),
-                        Arrays.asList(new String[] {
-                                "scen1",
-                                "scen2",
-                        "scen3" }));
-                    break;
-                case has_result:
-                    setTransientValue(
-                        ConstrutorParameter.Result.ordinal(),
-                        scenarioToken + "1");
-                    break;
-                case has_id:
-                    setTransientValue(
-                        ConstrutorParameter.Identifier.ordinal(),
-                        Arrays.asList(new String[] { scenarioToken + "2" }));
-                    break;
-                default:
-                    //@PMD, do nothing by default.
-            }
-        }
+        source.addTransientCase(
+            ConstructorParameter.Scenario,
+            new ArrayList<String>(),
+            Variable.empty_scenario);
+
+        source.addTransientCase(
+            ConstructorParameter.Scenario,
+            Arrays.asList(new String[] { "scen1" }),
+            Variable.one_scenario);
+
+        source.addTransientCase(
+            ConstructorParameter.Scenario,
+            Arrays.asList(new String[] {
+                    "scen1",
+                    "scen2",
+                    "scen3" }),
+            Variable.three_scenario);
+
+        source.addTransientCase(
+            ConstructorParameter.Result,
+            Variable.has_result + "1",
+            Variable.has_result);
+
+        source.addTransientCase(
+            ConstructorParameter.Identifier,
+            Arrays.asList(new String[] { Variable.has_id + "2" }),
+            Variable.has_id);
+
+        source.notifyObservers();
     }
+
 
     /** {@inheritDoc} */
     @Override

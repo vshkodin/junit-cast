@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import junitcast.util.Constant;
+
 /**
  * Scenario observable.
  *
@@ -70,7 +72,7 @@ public class ScenarioSource<S> {
      * @param pTestCase Not null.
      * @return null when Variable enum is not found.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(Constant.Warning.UNCHECKED)
     Class<? extends Enum<?>> findVariableEnum(
             final AbstractTestCase<?, S> pTestCase)
     {
@@ -92,38 +94,37 @@ public class ScenarioSource<S> {
      * Convenience method to set transient value on a test case.
      * 
      * @param key transient key/name.
-     * @param value transient value to set.
+     * @param caseParser case parser instance. Must not be null.
      * @param cases applicable Variable cases.
      * 
      * @param <C> case enum.
      * @param <T> transient enum.
      */
     public <C extends Enum<C>, T extends Enum<T>> void addTransientCase(
-            final T key, final Object value, final C... cases)
+            final T key, final CaseParser caseParser, final C... cases)
+    {
+        addTransientCase(key, (Object) caseParser, cases);
+    }
+
+    /**
+     * Convenience method to set transient value on a test case using the case
+     * name.
+     * 
+     * @param key transient key/name.
+     * @param cases applicable Variable cases.
+     * 
+     * @param <C> case enum.
+     * @param <T> transient enum.
+     */
+    public <C extends Enum<C>, T extends Enum<T>> void addTransientCaseName(
+            final T key, final C... cases)
     {
         checkValidTestCase(cases);
         for (final C nextCase : cases) {
-            addObserver(nextCase, new CaseObserver<S>() {
-
-                @Override
-                public void prepareCase(final S caseRaw)
-                {
-                    Object valueCalc;
-                    if (value instanceof CaseParser) {
-                        final CaseParser caseParser = (CaseParser) value;
-                        valueCalc = caseParser.parse(nextCase);
-                    } else {
-                        valueCalc = value;
-                    }
-                    @SuppressWarnings("unchecked")
-                    final AbstractTransientValueTestCase<?, S, Object> transCase = (AbstractTransientValueTestCase<?, S, Object>) testCase;
-                    transCase.setTransientValue(key, valueCalc);
-                }
-            });
-
+            addTransientCase(key, nextCase.name(), cases);
         }
-
     }
+
 
     /**
      * Convenience method to set transient value on a test case.
@@ -136,9 +137,35 @@ public class ScenarioSource<S> {
      * @param <T> transient enum.
      */
     public <C extends Enum<C>, T extends Enum<T>> void addTransientCase(
-            final T key, final CaseParser caseParser, final C... cases)
+            final T key, final Object value, final C... cases)
     {
-        addTransientCase(key, (Object) caseParser, cases);
+        assert cases != null;
+        assert cases.length > 0;
+        for (final C nextCase : cases) {
+            addObserver(nextCase, createNewCase(nextCase, key, value));
+        }
+    }
+
+    <T extends Enum<T>, C extends Enum<C>> CaseObserver<S> createNewCase(
+            final C nextCase, final T key, final Object value)
+    {
+        return new CaseObserver<S>() {
+
+            @Override
+            public void prepareCase(final S caseRaw)
+            {
+                Object valueCalc;
+                if (value instanceof CaseParser) {
+                    final CaseParser caseParser = (CaseParser) value;
+                    valueCalc = caseParser.parse(nextCase);
+                } else {
+                    valueCalc = value;
+                }
+                @SuppressWarnings(Constant.Warning.UNCHECKED)
+                final AbstractTransientValueTestCase<?, S, Object> transCase = (AbstractTransientValueTestCase<?, S, Object>) testCase;
+                transCase.setTransientValue(key, valueCalc);
+            }
+        };
     }
 
 
@@ -186,7 +213,7 @@ public class ScenarioSource<S> {
 
         for (final S nextCase : this.testCase.getParameter().getScenario()) {
 
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings(Constant.Warning.UNCHECKED)
             final Enum<?> nextEnum = Enum.valueOf(this.enumType, nextCase
                 .toString()
                 .replaceAll(" ", ""));
