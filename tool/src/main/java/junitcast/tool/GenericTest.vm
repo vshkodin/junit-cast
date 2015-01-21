@@ -1,0 +1,116 @@
+$license
+package $package;
+
+import java.util.Collection;
+import java.util.List;
+
+import junitcast.AbstractTestCase;
+import junitcast.AbstractTransientValueTestCase;
+import junitcast.MockitoHelper;
+import junitcast.Parameter;
+import junitcast.ParameterGenerator;
+import junitcast.ScenarioSource;
+
+import org.junit.Assert;
+import org.junit.runners.Parameterized.Parameters;
+
+/**
+ * Unit test for $classname.
+ * 
+ * <pre>
+ * $Author: $ 
+ * $Date: $ 
+ * </pre>
+ * 
+ * @author r39
+ *  
+ * Generated on $gendate. 
+ */
+public class $testname extends AbstractTransientValueTestCase<$classname, String, Object> {
+
+
+    $fileid
+
+
+    /**
+     * @param pParameter data transfer object to be injected by Parameterized
+     *            test runner.
+     */
+    public $testname(final Parameter<String> pParameter) {
+        super(pParameter);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    protected void setupTargetObject(final List<Object> constructorParams)
+    {
+        new MockitoHelper().setupTargetObject(this, constructorParams);
+    }
+
+    /**
+     * <pre>
+     * Test data generator.
+     * This method is called by the JUnit parameterized test runner and
+     * returns a Collection of Arrays.  For each Array in the Collection,
+     * each array element corresponds to a parameter in the constructor.
+     * </pre>
+     */
+    @Parameters(name = "{0}")
+    public static Collection<Object[]> generateData()
+    {
+        return new ParameterGenerator<String>()
+            .genVarData($testname .class.getName());
+    }
+    
+    
+    
+
+    /** {@inheritDoc} */
+    @Override
+    protected void prepare()
+    {
+        ScenarioSource<String> source = new ScenarioSource<String>(this);
+#foreach( $nextvar in $varlist )
+        source.addObserver(Variable.$nextvar.get("case"), null);
+#end                    
+        source.notifyObservers();        
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected Object execute()
+    {
+        //TODO:
+        setResult(getMockSubject().<callSutMethod>());
+        
+        return getResult();
+    }
+
+    /** */
+    enum Variable {
+    
+#foreach( $nextvar in $varlist )
+        /** */
+        $nextvar.get("var")
+#end
+        ;
+    }
+
+    /** */
+    enum Result {
+        /** */
+        $resultleft, $resultright
+        ;
+    }
+    
+    /** */
+    enum Trans {
+        /** */
+        Param
+    }
+    
+
+
+}
