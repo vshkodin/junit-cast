@@ -216,7 +216,7 @@ public class ScenarioSource<S> {
             @SuppressWarnings(Constant.Warning.UNCHECKED)
             final Enum<?> nextEnum = Enum.valueOf(this.enumType, nextCase
                 .toString()
-                .replaceAll(" ", ""));
+                .replaceAll(" ", "_"));
 
             final List<CaseObserver<S>> caseObsList = this.map.get(nextEnum);
 

@@ -28,20 +28,14 @@ public class SetMergerTest
         extends
         AbstractTransientValueTestCase<SetMerger<String>, String, List<Set<String>>> {
 
-    /** Case Descriptions. */
-    public enum Case {
-        /** */
-        GetMergeCount, IsValid, MergeListOfListOfT,
-        /** */
-        MergeListOfListOfTListOfListOfT
-    }
 
     /** */
-    public enum Variable1 {
+    public enum Variable {
         /** */
         list_null, empty_list, list_1x3, list_w_null, list_1x3_w_null,
+
         /** */
-        list_3x1, list_2x3, list_3x5, list_2x5x3
+        list_1x0, list_3x1, list_2x3, list_3x5, list_2x5x3
     }
 
     /** @param pParameter Data Transfer Object Parameter in Parameterized test. */
@@ -75,73 +69,76 @@ public class SetMergerTest
     @Override
     protected void prepare()
     {
-        final Case currentCase = Case.valueOf(getParameter().getCaseDesc());
-        for (final String scenToken : getParameter().getScenario()) {
-            switch (currentCase) {
-                case GetMergeCount:
-                    prepareCase1(scenToken);
-                    break;
-                case MergeListOfListOfT:
-                    prepareCase2(scenToken);
-                    break;
-                case MergeListOfListOfTListOfListOfT:
-                    prepareCase3(scenToken);
-                    break;
-                case IsValid:
-                    prepareCase4(scenToken);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+        final ScenarioSource<String> source = new ScenarioSource<String>(this);
 
-    /**
-     * @param scenToken scenario element.
-     */
-    private void prepareCase1(final String scenToken)
-    {
-        final Variable1 currentVar = Variable1.valueOf(scenToken.replaceAll(
-            " ",
-            "_"));
-        switch (currentVar) {
-            case list_null:
-                break;
-            case empty_list:
-                setTransientValue(0, new ArrayList<Set<String>>());
-                break;
+        source.addTransientCase(
+            0,
+            new ArrayList<Set<String>>(),
+            Variable.empty_list);
 
-            case list_w_null:
+        source.addTransientCase(
+            0,
+            new ArrayList<Set<String>>(),
+            Variable.list_w_null);
+
+        source.addObserver(Variable.list_w_null, new CaseObserver<String>() {
+            @Override
+            public void prepareCase(final String caseRaw)
+            {
                 final List<Set<String>> listWithNull = new ArrayList<Set<String>>();
                 listWithNull.add(createSet(1));
                 listWithNull.add(null);
-                break;
+                setTransientValue(0, listWithNull);
+            }
+        });
 
-            case list_1x3_w_null:
-                final List<Set<String>> setWithNull = new ArrayList<Set<String>>();
-                setWithNull.add(createSet(1));
-                setWithNull.add(new HashSet<String>(Arrays.asList(new String[] {
-                        "one",
-                        "two",
-                        null })));
-                setTransientValue(0, setWithNull);
-                break;
-
-            default:
-                final Pattern pattern = Pattern.compile("\\w* \\d(x\\d)*");
-                final Matcher matcher = pattern.matcher(scenToken);
-                if (matcher.find()) {
-                    final String indecesRaw = scenToken.substring(scenToken
-                        .indexOf(' ') + 1);
-                    final String[] indeces = indecesRaw.split("x");
-                    final List<Set<String>> setOfSet = new ArrayList<Set<String>>();
-                    for (final String index : indeces) {
-                        setOfSet.add(createSet(Integer.parseInt(index)));
-                    }
-                    setTransientValue(0, setOfSet);
+        source.addObserver(
+            Variable.list_1x3_w_null,
+            new CaseObserver<String>() {
+                @Override
+                public void prepareCase(final String caseRaw)
+                {
+                    final List<Set<String>> setWithNull = new ArrayList<Set<String>>();
+                    setWithNull.add(createSet(1));
+                    setWithNull.add(new HashSet<String>(Arrays
+                        .asList(new String[] {
+                                "one",
+                                "two",
+                                null })));
+                    setTransientValue(0, setWithNull);
                 }
-                break;
+            });
+
+        for (final String scenToken : getParameter().getScenario()) {
+
+
+            final Pattern pattern = Pattern.compile("\\w* \\d(x\\d)*$");
+            final Matcher matcher = pattern.matcher(scenToken);
+            if (matcher.find()) {
+                final Variable currentVar = Variable.valueOf(scenToken
+                    .replaceAll(" ", "_"));
+
+                source.addTransientCase(
+                    0,
+                    createListOfSet(scenToken),
+                    currentVar);
+            }
         }
+
+        source.notifyObservers();
+
+    }
+
+    private List<Set<String>> createListOfSet(final String scenToken)
+    {
+        final String indecesRaw = scenToken
+            .substring(scenToken.indexOf(' ') + 1);
+        final String[] indeces = indecesRaw.split("x");
+        final List<Set<String>> listOfSet = new ArrayList<Set<String>>();
+        for (final String index : indeces) {
+            listOfSet.add(createSet(Integer.parseInt(index)));
+        }
+        return listOfSet;
     }
 
     /**
@@ -151,76 +148,28 @@ public class SetMergerTest
      */
     Set<String> createSet(final int size)
     {
-        final String[] arrSet = new String[size];
+        final Set<String> indexSet = new HashSet<String>();
         for (int i = 0; i < size; i++) {
-            arrSet[i] = String.valueOf(i);
+            indexSet.add(String.valueOf(i));
         }
 
-        return new HashSet<String>(Arrays.asList(arrSet));
+        return indexSet;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected String execute()
+    protected Object execute()
     {
-        String retval = null;
-        final Case currentCase = Case.valueOf(getParameter().getCaseDesc());
-
-        switch (currentCase) {
-
-            case GetMergeCount:
-                final List<Set<String>> param = getTransientValue(0);
-                try {
-                    final int mergeCount = getMockSubject()
-                        .getMergeCount(param);
-                    retval = String.valueOf(mergeCount);
-                } catch (final IllegalArgumentException iae) {
-                    retval = "IAE";
-                }
-                break;
-
-            case MergeListOfListOfT:
-                break;
-
-            case MergeListOfListOfTListOfListOfT:
-                break;
-
-            case IsValid:
-                break;
-            default:
-                break;
-
+        final List<Set<String>> param = getTransientValue(0);
+        try {
+            final int mergeCount = getMockSubject().getMergeCount(param);
+            setResult(String.valueOf(mergeCount));
+        } catch (final IllegalArgumentException iae) {
+            setResult("IAE");
         }
-
-        return retval;
-
-    }
-
-    /**
-     * @param scenToken scenario element.
-     */
-    private void prepareCase2(final String scenToken)
-    {
-        // TODO Auto-generated method stub
+        return getResult();
 
     }
 
-    /**
-     * @param scenToken scenario element.
-     */
-    private void prepareCase3(final String scenToken)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * @param scenToken scenario element.
-     */
-    private void prepareCase4(final String scenToken)
-    {
-        // TODO Auto-generated method stub
-
-    }
 
 }

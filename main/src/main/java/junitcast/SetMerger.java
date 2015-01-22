@@ -74,55 +74,55 @@ public class SetMerger<E> {
     {
         final Set<List<E>> mergedList = new LinkedHashSet<List<E>>();
 
-        final int[] index = new int[uncombinedSet.size()];
+        final int[] indexArr = new int[uncombinedSet.size()];
         final int mergeMaxIdx = getMergeCount(uncombinedSet) - 1;
 
-        Arrays.fill(index, 0);
+        Arrays.fill(indexArr, 0);
 
         // First combination is always valid
         final List<E> combination = new ArrayList<E>();
-        for (int i = 0; i < index.length; i++) {
+        for (int i = 0; i < indexArr.length; i++) {
             combination.add((E) ((Set<List<E>>) uncombinedSet.toArray()[i])
-                .toArray()[index[i]]);
+                .toArray()[indexArr[i]]);
         }
 
         mergedList.add(combination);
-        combineSuceeding(uncombinedSet, mergedList, index, mergeMaxIdx);
+        combineSuceeding(uncombinedSet, mergedList, indexArr, mergeMaxIdx);
         return mergedList;
     }
 
     /**
      * @param uncombinedSet uncombined set to be merged.
      * @param mergedList merged list instance.
-     * @param index index array.
-     * @param mergeMaxIdx max index of list to merge.
+     * @param indexArr index array.
+     * @param mergeMaxIndex max index of list to merge.
      * @param <T> element type.
      */
     @SuppressWarnings({
             "unchecked",
             "PMD.AvoidInstantiatingObjectsInLoops" })
     <T> void combineSuceeding(final List<Set<T>> uncombinedSet,
-            final Set<List<T>> mergedList, final int[] index,
-            final int mergeMaxIdx)
+            final Set<List<T>> mergedList, final int[] indexArr,
+            final int mergeMaxIndex)
     {
         List<T> combination;
-        for (int i = 0; i < mergeMaxIdx; i++) {
+        for (int i = 0; i < mergeMaxIndex; i++) {
             combination = new ArrayList<T>();
             boolean found = false;
             // We Use reverse order
-            for (int j = index.length - 1; j >= 0 && !found; j--) {
+            for (int indexArrIdx = indexArr.length - 1; indexArrIdx >= 0
+                    && !found; indexArrIdx--) {
                 final int currentListSize = ((Set<Set<T>>) uncombinedSet
-                    .toArray()[j]).size();
-                if (index[j] < currentListSize - 1) {
-                    index[j] = index[j] + 1;
+                    .toArray()[indexArrIdx]).size();
+
+                if (indexArr[indexArrIdx] < currentListSize - 1) {
+                    indexArr[indexArrIdx] = indexArr[indexArrIdx] + 1;
                     found = true;
-                } else {
-                    index[j] = 0;
                 }
             }
-            for (int j = 0; j < index.length; j++) {
+            for (int j = 0; j < indexArr.length; j++) {
                 combination.add((T) ((Set<Set<T>>) uncombinedSet.toArray()[j])
-                    .toArray()[index[j]]);
+                    .toArray()[indexArr[j]]);
             }
             mergedList.add(combination);
         }
