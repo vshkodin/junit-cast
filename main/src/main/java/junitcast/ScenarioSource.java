@@ -45,7 +45,7 @@ public class ScenarioSource<S> {
 
     /** */
     @SuppressWarnings("rawtypes")
-    private final transient Map<Enum, List<CaseObserver<S>>> map = new HashMap<Enum, List<CaseObserver<S>>>();
+    private final transient Map<Enum, List<CaseObserver<S>>> enumObsMap = new HashMap<Enum, List<CaseObserver<S>>>();
 
     /** */
     @SuppressWarnings("rawtypes")
@@ -141,6 +141,7 @@ public class ScenarioSource<S> {
     {
         assert cases != null;
         assert cases.length > 0;
+
         for (final C nextCase : cases) {
             addObserver(nextCase, createNewCase(nextCase, key, value));
         }
@@ -149,6 +150,8 @@ public class ScenarioSource<S> {
     <T, C extends Enum<C>> CaseObserver<S> createNewCase(final C nextCase,
             final T key, final Object value)
     {
+        assert testCase instanceof AbstractTransientValueTestCase;
+
         return new CaseObserver<S>() {
 
             @Override
@@ -197,13 +200,15 @@ public class ScenarioSource<S> {
      */
     public void addObserver(final Enum<?> kaso, final CaseObserver<S> observer)
     {
-        if (this.map.get(kaso) == null) {
-            this.map.put(kaso, new ArrayList<CaseObserver<S>>());
+        assert observer != null;
+
+        if (this.enumObsMap.get(kaso) == null) {
+            this.enumObsMap.put(kaso, new ArrayList<CaseObserver<S>>());
         }
-        if (observer != null) {
-            final List<CaseObserver<S>> caseObsList = this.map.get(kaso);
-            caseObsList.add(observer);
-        }
+        final List<CaseObserver<S>> caseObsList = this.enumObsMap.get(kaso);
+        caseObsList.add(observer);
+
+        assert this.enumObsMap.size() > 0;
     }
 
 
@@ -218,7 +223,8 @@ public class ScenarioSource<S> {
                 .toString()
                 .replaceAll(" ", "_"));
 
-            final List<CaseObserver<S>> caseObsList = this.map.get(nextEnum);
+            final List<CaseObserver<S>> caseObsList = this.enumObsMap
+                .get(nextEnum);
 
             if (caseObsList != null) {
                 for (final CaseObserver<S> nextCaseObserver : caseObsList) {
@@ -228,12 +234,13 @@ public class ScenarioSource<S> {
         }
     }
 
-
     /** {@inheritDoc} */
     @Override
     public String toString()
     {
-        return super.toString() + " " + RCS_ID;
+        return getClass().getSimpleName() + "["
+                + testCase.getClass().getSimpleName() + "] Observer size: "
+                + enumObsMap.size();
     }
 
 }
