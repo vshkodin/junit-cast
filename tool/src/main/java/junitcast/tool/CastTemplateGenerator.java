@@ -35,6 +35,9 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Use to generate template test case file based on JUnitCast property file.
@@ -47,12 +50,16 @@ import org.apache.velocity.exception.ResourceNotFoundException;
  * 
  * @author r39
  */
-
-public class GenerateTestCase {
+public class CastTemplateGenerator {
 
 
     /** Standard Oracle versioning. */
     public static final String RCS_ID = "$Revision$";
+
+
+    /** sl4j logger instance. */
+    private static final Logger LOGGER = LoggerFactory
+        .getLogger(CastTemplateGenerator.class);
 
 
     /** Velocity Template file. */
@@ -70,11 +77,11 @@ public class GenerateTestCase {
      * @param args Pass the resource path
      * @throws IOException when File IO exception occurs.
      */
-    public static void main(final String[] args) throws IOException
+    public static void main(final String... args) throws IOException
     {
         if (args.length < 1) {
-            System.out
-                .println("Usage: GenerateTestCase <resource name> <optional destination directory>");
+            LOGGER
+                .info("Usage: GenerateTestCase <resource name> <optional destination directory>");
         } else {
             final String propFile = args[0];
 
@@ -87,9 +94,9 @@ public class GenerateTestCase {
             try {
                 template = Velocity.getTemplate(TEMPLATE_FILE);
             } catch (final ResourceNotFoundException e2) {
-                System.err.println("cannot find template " + TEMPLATE_FILE);
+                LOGGER.error("cannot find template " + TEMPLATE_FILE);
             } catch (final ParseErrorException e) {
-                System.err.println("Syntax error in template : " + e);
+                LOGGER.error("Syntax error in template : " + e);
             }
 
             final String classname = build(context, propFile);
@@ -102,9 +109,7 @@ public class GenerateTestCase {
                     outputFile.append(File.separator);
                 }
             }
-            outputFile.append(classname);
-            outputFile.append(".java.gen");
-
+            outputFile.append(classname).append(".java.gen");
             final File opFile = new File(outputFile.toString());
             if (opFile.exists()) {
                 opFile.delete();
@@ -116,12 +121,13 @@ public class GenerateTestCase {
             }
             writer.flush();
             writer.close();
-            System.out.println("Output: " + outputFile.toString());
+
+            LOGGER.info("Output: " + outputFile.toString());
         }
     }
 
     /**
-     * Build and return the simple class name.
+     * Build and return the test class simple name.
      * 
      * @param context velocity context instance.
      * @param propFile property file to process.
@@ -129,7 +135,6 @@ public class GenerateTestCase {
     static String build(final VelocityContext context, final String propFile)
     {
         final ResourceBundle resBundle = ResourceBundle.getBundle(propFile);
-
         context.put(Constant.VelocityField.gendate.getParam(), new Date());
 
         final String pkg = propFile.substring(0, propFile.lastIndexOf('.'));
@@ -152,24 +157,9 @@ public class GenerateTestCase {
         final String varRaw = resBundle.getString(Constant.ResourceKey.var
             .name() + "0");
 
-        for (final String string : varRaw.split("\\|")) {
-            for (final String nextString : string.trim().split(",")) {
-
-                final Map<String, Object> map = new HashMap<String, Object>();
-
-                String prefComma;
-                if (varList.isEmpty()) {
-                    prefComma = "";
-                } else {
-                    prefComma = ", ";
-                }
-
-                final String kaso = nextString.trim().replaceAll(" ", "");
-                final String var = prefComma + kaso;
-
-                map.put(Constant.VelocityField.var.getParam(), var);
-                map.put(Constant.VelocityField.kase.getParam(), kaso);
-                varList.add(map);
+        for (final String nextVarSet : varRaw.split("\\|")) {
+            for (final String nextVarName : nextVarSet.trim().split(",")) {
+                addVariableName(varList, nextVarName);
             }
         }
 
@@ -184,10 +174,30 @@ public class GenerateTestCase {
                 string[1]);
 
         } catch (final MissingResourceException ignore) {
-            ignore.printStackTrace();
+            LOGGER.error(ignore.getMessage(), ignore);
         }
 
         return testName;
+    }
+
+    private static void addVariableName(
+            final List<Map<String, Object>> varList, final String nextString)
+    {
+        final Map<String, Object> map = new HashMap<String, Object>();
+
+        String prefComma;
+        if (varList.isEmpty()) {
+            prefComma = "";
+        } else {
+            prefComma = ", ";
+        }
+
+        final String kaso = nextString.trim().replaceAll(" ", "");
+        final String var = prefComma + kaso;
+
+        map.put(Constant.VelocityField.var.getParam(), var);
+        map.put(Constant.VelocityField.kase.getParam(), kaso);
+        varList.add(map);
     }
 
     static StringUtil getStrUtil()
@@ -199,6 +209,7 @@ public class GenerateTestCase {
      * @see {@link Object#toString()}
      * @return String representation of this instance.
      */
+    @Override
     public String toString()
     {
         return super.toString() + " " + RCS_ID;
