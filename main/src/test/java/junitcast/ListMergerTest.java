@@ -23,7 +23,7 @@ import org.junit.runners.Parameterized.Parameters;
  *
  * @author Royce Remulla
  */
-public class SetMergerTest
+public class ListMergerTest
         extends
         AbstractTransientValueTestCase<ListMerger<String>, String, List<List<String>>> {
 
@@ -38,7 +38,7 @@ public class SetMergerTest
     }
 
     /** @param pParameter Data Transfer Object Parameter in Parameterized test. */
-    public SetMergerTest(final Parameter<String> pParameter) {
+    public ListMergerTest(final Parameter<String> pParameter) {
         super(pParameter);
     }
 

@@ -18,7 +18,6 @@ package junitcast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Merges a Set of Set.
@@ -91,7 +90,7 @@ public class ListMerger<E> {
     }
 
     /**
-     * @param uncombinedSet uncombined set to be merged.
+     * @param uncombinedList uncombined list to be merged.
      * @param mergedList merged list instance.
      * @param indexArr index array.
      * @param mergeMaxIndex max index of list to merge.
@@ -100,7 +99,7 @@ public class ListMerger<E> {
     @SuppressWarnings({
             "unchecked",
             "PMD.AvoidInstantiatingObjectsInLoops" })
-    <T> void combineSuceeding(final List<List<T>> uncombinedSet,
+    <T> void combineSuceeding(final List<List<T>> uncombinedList,
             final List<List<T>> mergedList, final int[] indexArr,
             final int mergeMaxIndex)
     {
@@ -111,7 +110,7 @@ public class ListMerger<E> {
             // We Use reverse order
             for (int indexArrIdx = indexArr.length - 1; indexArrIdx >= 0
                     && !found; indexArrIdx--) {
-                final int currentListSize = ((Set<Set<T>>) uncombinedSet
+                final int currentListSize = ((List<List<T>>) uncombinedList
                     .toArray()[indexArrIdx]).size();
 
                 if (indexArr[indexArrIdx] < currentListSize - 1) {
@@ -120,8 +119,9 @@ public class ListMerger<E> {
                 }
             }
             for (int j = 0; j < indexArr.length; j++) {
-                combination.add((T) ((Set<Set<T>>) uncombinedSet.toArray()[j])
-                    .toArray()[indexArr[j]]);
+                combination
+                    .add((T) ((List<List<T>>) uncombinedList.toArray()[j])
+                        .toArray()[indexArr[j]]);
             }
             mergedList.add(combination);
         }
