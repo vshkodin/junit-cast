@@ -56,11 +56,11 @@ public class Rule {
      * Visible:Proposed|Approved<br/>
      * <br/>
      * Peace:Friendly|Indifferent\<br/>
-     * ,War:Angry\<br/>
-     * ,Neutral:Play safe
+     * ~War:Angry\<br/>
+     * ~Neutral:Play safe
      * 
      * @param pActRuleSrc the Action and Rule clause String. Separated by
-     *            colon(:). Multiple actions can be separated by comma (,). <br/>
+     *            colon(:). Multiple actions can be separated by tilde (~). <br/>
      */
     public Rule(final String pActRuleSrc) {
         final IllegalArgumentException exception = new IllegalArgumentException(
@@ -134,6 +134,7 @@ public class Rule {
      * @see {@link Object#toString()}
      * @return String representation of this instance.
      */
+    @Override
     public String toString()
     {
         return String.valueOf(this.actionRuleMap);

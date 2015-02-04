@@ -19,10 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import junitcast.rule.Rule;
 
@@ -89,13 +87,13 @@ public class ParameterGeneratorTest
     public static Collection<Object[]> generateData()
     {
         final List<CaseFixture<String>> fixTureList = new ArrayList<CaseFixture<String>>();
-        final List<Set<String>> variables = new ArrayList<Set<String>>();
-        variables.add(new LinkedHashSet<String>(Arrays
+        final List<List<String>> variables = new ArrayList<List<String>>();
+        variables.add(new ArrayList<String>(Arrays
             .asList(new String[] { Variable.Init.name() })));
-        variables.add(new LinkedHashSet<String>(Arrays.asList(new String[] {
+        variables.add(new ArrayList<String>(Arrays.asList(new String[] {
                 Variable.Negative.name(),
                 Variable.Positive.name() })));
-        variables.add(new LinkedHashSet<String>(Arrays.asList(new String[] {
+        variables.add(new ArrayList<String>(Arrays.asList(new String[] {
                 Variable.Matched_Expected.name(),
                 Variable.Missed_Expected.name() })));
 

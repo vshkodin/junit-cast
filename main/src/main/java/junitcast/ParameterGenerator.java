@@ -71,7 +71,7 @@ public class ParameterGenerator<T> {
      * @param resourceUri resource bundle uri.
      */
     @SuppressWarnings(Constant.Warning.UNCHECKED)
-    public Collection<Object[]> genFixData(final String resourceUri)
+    public Collection<Object[]> genFixedData(final String resourceUri)
     {
         final ResourceFixture resFixFactory = new ResourceFixture(resourceUri);
         return generateData(
@@ -107,18 +107,21 @@ public class ParameterGenerator<T> {
                 addFixedCase(retval, caseFixture);
             }
         }
-        Collections.sort(retval, new Comparator<Object[]>() {
 
-            @Override
-            @SuppressWarnings("PMD.UseVarargs")
-            public int compare(final Object[] paramArr1,
-                    final Object[] paramArr2)
-            {
-                final Parameter<T> param1 = (Parameter<T>) paramArr1[0];
-                final Parameter<T> param2 = (Parameter<T>) paramArr2[0];
-                return param1.toString().compareTo(param2.toString());
-            }
-        });
+        if (isComputed) {
+            Collections.sort(retval, new Comparator<Object[]>() {
+
+                @Override
+                @SuppressWarnings("PMD.UseVarargs")
+                public int compare(final Object[] paramArr1,
+                        final Object[] paramArr2)
+                {
+                    final Parameter<T> param1 = (Parameter<T>) paramArr1[0];
+                    final Parameter<T> param2 = (Parameter<T>) paramArr2[0];
+                    return param1.toString().compareTo(param2.toString());
+                }
+            });
+        }
         return retval;
     }
 
@@ -131,8 +134,8 @@ public class ParameterGenerator<T> {
     private void addCase(final List<Object[]> paramCollection,
             final CaseFixture<T> caseFixture)
     {
-        final SetMerger<T> listCombinator = new SetMerger<T>();
-        final Set<List<T>> combinations = listCombinator.merge(caseFixture
+        final ListMerger<T> listCombinator = new ListMerger<T>();
+        final List<List<T>> combinations = listCombinator.merge(caseFixture
             .getVariables());
 
         for (final List<T> scenario : combinations) {
@@ -157,7 +160,7 @@ public class ParameterGenerator<T> {
     private void addFixedCase(final List<Object[]> paramCollection,
             final CaseFixture<T> caseFixture)
     {
-        for (final Set<T> scenario : caseFixture.getVariables()) {
+        for (final List<T> scenario : caseFixture.getVariables()) {
             @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             final List<?> scenList = new ArrayList<Object>(scenario);
 

@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import junitcast.converter.ElementConverter;
 import junitcast.rule.Rule;
@@ -35,7 +34,7 @@ public class CaseFixture<T> {
     private final transient String caseDesc;
 
     /** */
-    private final transient List<Set<T>> variables;
+    private final transient List<List<T>> variables;
 
     /** */
     private transient List<ElementConverter> converters;
@@ -63,7 +62,8 @@ public class CaseFixture<T> {
      * @param pVariables case variables.
      * @param pRule source output to rule mapping. (e.g. OUTPUT:true|false).
      */
-    public CaseFixture(final String pCaseDesc, final List<Set<T>> pVariables, final Rule pRule) {
+    public CaseFixture(final String pCaseDesc, final List<List<T>> pVariables,
+            final Rule pRule) {
         this.caseDesc = pCaseDesc;
         this.variables = pVariables;
         this.rule = pRule;
@@ -76,7 +76,8 @@ public class CaseFixture<T> {
      * @param pRule source output to rule mapping. (e.g. OUTPUT:true|false).
      * @param pPair output pair for binary output rules.
      */
-    public CaseFixture(final String pCaseDesc, final List<Set<T>> pVariables, final Rule pRule, final String pPair) {
+    public CaseFixture(final String pCaseDesc, final List<List<T>> pVariables,
+            final Rule pRule, final String pPair) {
         this(pCaseDesc, pVariables, pRule);
         if (pPair != null) {
             final String[] pairArr = pPair.split(":");
@@ -153,7 +154,8 @@ public class CaseFixture<T> {
      * 
      * @param pRuleConverter rule token converters.
      */
-    public CaseFixture<T> ruleConverter(final Map<String, ElementConverter> pRuleConverter)
+    public CaseFixture<T> ruleConverter(
+            final Map<String, ElementConverter> pRuleConverter)
     {
         this.ruleConv = pRuleConverter;
         return this;
@@ -178,7 +180,7 @@ public class CaseFixture<T> {
     /**
      * @return the variables
      */
-    public List<Set<T>> getVariables()
+    public List<List<T>> getVariables()
     {
         return this.variables;
     }

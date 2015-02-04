@@ -6,7 +6,6 @@ package junitcast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -26,7 +25,7 @@ import org.junit.runners.Parameterized.Parameters;
  */
 public class SetMergerTest
         extends
-        AbstractTransientValueTestCase<SetMerger<String>, String, List<Set<String>>> {
+        AbstractTransientValueTestCase<ListMerger<String>, String, List<List<String>>> {
 
 
     /** */
@@ -85,8 +84,8 @@ public class SetMergerTest
             @Override
             public void prepareCase(final String caseRaw)
             {
-                final List<Set<String>> listWithNull = new ArrayList<Set<String>>();
-                listWithNull.add(createSet(1));
+                final List<List<String>> listWithNull = new ArrayList<List<String>>();
+                listWithNull.add(createList(1));
                 listWithNull.add(null);
                 setTransientValue(0, listWithNull);
             }
@@ -98,9 +97,9 @@ public class SetMergerTest
                 @Override
                 public void prepareCase(final String caseRaw)
                 {
-                    final List<Set<String>> setWithNull = new ArrayList<Set<String>>();
-                    setWithNull.add(createSet(1));
-                    setWithNull.add(new HashSet<String>(Arrays
+                    final List<List<String>> setWithNull = new ArrayList<List<String>>();
+                    setWithNull.add(createList(1));
+                    setWithNull.add(new ArrayList<String>(Arrays
                         .asList(new String[] {
                                 "one",
                                 "two",
@@ -129,16 +128,16 @@ public class SetMergerTest
 
     }
 
-    private List<Set<String>> createListOfSet(final String scenToken)
+    private List<List<String>> createListOfSet(final String scenToken)
     {
         final String indecesRaw = scenToken
             .substring(scenToken.indexOf(' ') + 1);
         final String[] indeces = indecesRaw.split("x");
-        final List<Set<String>> listOfSet = new ArrayList<Set<String>>();
+        final List<List<String>> listOfList = new ArrayList<List<String>>();
         for (final String index : indeces) {
-            listOfSet.add(createSet(Integer.parseInt(index)));
+            listOfList.add(createList(Integer.parseInt(index)));
         }
-        return listOfSet;
+        return listOfList;
     }
 
     /**
@@ -146,21 +145,21 @@ public class SetMergerTest
      *
      * @param size size of set to create.
      */
-    Set<String> createSet(final int size)
+    List<String> createList(final int size)
     {
-        final Set<String> indexSet = new HashSet<String>();
+        final List<String> indexList = new ArrayList<String>();
         for (int i = 0; i < size; i++) {
-            indexSet.add(String.valueOf(i));
+            indexList.add(String.valueOf(i));
         }
 
-        return indexSet;
+        return indexList;
     }
 
     /** {@inheritDoc} */
     @Override
     protected Object execute()
     {
-        final List<Set<String>> param = getTransientValue(0);
+        final List<List<String>> param = getTransientValue(0);
         try {
             final int mergeCount = getMockSubject().getMergeCount(param);
             setResult(String.valueOf(mergeCount));

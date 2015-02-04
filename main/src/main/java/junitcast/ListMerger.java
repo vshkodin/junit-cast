@@ -17,7 +17,6 @@ package junitcast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +33,7 @@ import java.util.Set;
  * 
  * @param <E> Type of Set to merge.
  */
-public class SetMerger<E> {
+public class ListMerger<E> {
 
     /**
      * Derive the total count of every possible combinations.<br/>
@@ -42,23 +41,23 @@ public class SetMerger<E> {
      * NOTICE: Thanks to original author is Sebastien Boutte.<br/>
      * <br/>
      * 
-     * @param pListOfSet List of Set of Objects to count. Must not be null,
+     * @param pListOfList List of List of Objects to count. Must not be null,
      *            empty, or contain null or empty element.
      */
-    int getMergeCount(final List<Set<E>> pListOfSet)
+    int getMergeCount(final List<List<E>> pListOfList)
     {
-        if (pListOfSet == null || pListOfSet.contains(null)
-                || pListOfSet.isEmpty()) {
+        if (pListOfList == null || pListOfList.contains(null)
+                || pListOfList.isEmpty()) {
             throw new IllegalArgumentException(
                 "List must not be null, empty, or contain null set. ");
         }
         int mergeSize = 1; //NOPMD: init default, conditionally redefine.
-        for (final Set<E> nextSet : pListOfSet) {
-            if (nextSet.contains(null) || nextSet.isEmpty()) {
+        for (final List<E> nextList : pListOfList) {
+            if (nextList.contains(null) || nextList.isEmpty()) {
                 throw new IllegalArgumentException(
-                    "List Set must not be empty or contain null element. ");
+                    "List in a List must not be empty or contain null element. ");
             } else {
-                mergeSize = mergeSize * nextSet.size();
+                mergeSize = mergeSize * nextList.size();
             }
         }
         return mergeSize;
@@ -67,27 +66,27 @@ public class SetMerger<E> {
     /**
      * NOTICE: Thanks to original author Sebastien Boutte.<br/>
      * 
-     * @param uncombinedSet list of list of Objects to combine.
+     * @param uncombinedList list of list of Objects to combine.
      */
     @SuppressWarnings("unchecked")
-    public Set<List<E>> merge(final List<Set<E>> uncombinedSet)
+    public List<List<E>> merge(final List<List<E>> uncombinedList)
     {
-        final Set<List<E>> mergedList = new LinkedHashSet<List<E>>();
+        final List<List<E>> mergedList = new ArrayList<List<E>>();
 
-        final int[] indexArr = new int[uncombinedSet.size()];
-        final int mergeMaxIdx = getMergeCount(uncombinedSet) - 1;
+        final int[] indexArr = new int[uncombinedList.size()];
+        final int mergeMaxIdx = getMergeCount(uncombinedList) - 1;
 
         Arrays.fill(indexArr, 0);
 
         // First combination is always valid
         final List<E> combination = new ArrayList<E>();
         for (int i = 0; i < indexArr.length; i++) {
-            combination.add((E) ((Set<List<E>>) uncombinedSet.toArray()[i])
+            combination.add((E) ((List<List<E>>) uncombinedList.toArray()[i])
                 .toArray()[indexArr[i]]);
         }
 
         mergedList.add(combination);
-        combineSuceeding(uncombinedSet, mergedList, indexArr, mergeMaxIdx);
+        combineSuceeding(uncombinedList, mergedList, indexArr, mergeMaxIdx);
         return mergedList;
     }
 
@@ -101,8 +100,8 @@ public class SetMerger<E> {
     @SuppressWarnings({
             "unchecked",
             "PMD.AvoidInstantiatingObjectsInLoops" })
-    <T> void combineSuceeding(final List<Set<T>> uncombinedSet,
-            final Set<List<T>> mergedList, final int[] indexArr,
+    <T> void combineSuceeding(final List<List<T>> uncombinedSet,
+            final List<List<T>> mergedList, final int[] indexArr,
             final int mergeMaxIndex)
     {
         List<T> combination;
