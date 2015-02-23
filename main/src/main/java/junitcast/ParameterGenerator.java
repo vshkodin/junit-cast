@@ -164,7 +164,11 @@ public class ParameterGenerator<T> {
             @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             final List<?> scenList = new ArrayList<Object>(scenario);
 
-            final String result = validateRule((List<T>) scenList, caseFixture);
+            //            final String result = validateRule((List<T>) scenList, caseFixture);
+            final String result = caseFixture.getRule().getRuleAction(
+                (List<String>) scenario);
+
+            assert result != null;
             paramCollection.add(new Object[] { new Parameter<T>(caseFixture //NOPMD: False positive.
                 .getCaseDesc(), (List<T>) scenList, result, caseFixture
                 .getCaseId()) });

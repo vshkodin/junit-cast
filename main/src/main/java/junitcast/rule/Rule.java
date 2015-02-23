@@ -131,6 +131,33 @@ public class Rule {
     }
 
     /**
+     * Get rule result give a fixed list of scenario tokens. Used for fixed
+     * list.
+     * 
+     * @param scenario of interest.
+     * @return the actionToRuleClauses
+     */
+    @SuppressWarnings("PMD.OnlyOneReturn" /* Two only. */)
+    public String getRuleAction(final List<String> scenario)
+    {
+        assert scenario != null;
+
+        final String scenStr = scenario.toString();
+        final String andedScen = scenStr
+            .substring(1, scenStr.length() - 1)
+            .replaceAll(", ", "&");
+
+        for (final String key : actionRuleMap.keySet()) {
+
+            final String clause = actionRuleMap.get(key);
+            if (clause.contains(andedScen)) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @see {@link Object#toString()}
      * @return String representation of this instance.
      */

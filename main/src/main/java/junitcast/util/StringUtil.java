@@ -27,7 +27,7 @@ public class StringUtil {
      * 
      * @param array String array to trim contents.
      */
-    public String[] trimArray(final String... array)
+    public static String[] trimArray(final String... array)
     {
         String[] retval = null; //NOPMD: null default, conditionally redefine.
         if (array != null) {
@@ -50,7 +50,7 @@ public class StringUtil {
      * 
      * @param string string to check.
      */
-    public boolean hasValue(final String string)
+    public static boolean hasValue(final String string)
     {
         return string != null && !"".equals(string.trim());
     }
