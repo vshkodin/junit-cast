@@ -38,6 +38,8 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ph.rye.common.io.ConsoleInputReader;
+
 
 /**
  * Use to generate template test case file based on JUnitCast property file.
@@ -68,6 +70,9 @@ public class CastTemplateGenerator {
     /** */
     private static final StringUtil STR_UTIL = new StringUtil();
 
+    /** */
+    private final transient ConsoleInputReader inputReader = new ConsoleInputReader();
+
 
     /**
      * Command line utility.
@@ -79,51 +84,52 @@ public class CastTemplateGenerator {
      */
     public static void main(final String... args) throws IOException
     {
-        if (args.length < 1) {
-            LOGGER
-                .info("Usage: GenerateTestCase <resource name> <optional destination directory>");
-        } else {
-            final String propFile = args[0];
+        //        if (args.length < 1) {
+        //            LOGGER
+        //                .info("Usage: GenerateTestCase <resource name> <optional destination directory>");
+        //        } else {
+        //
 
+        LOGGER.info("Enter full property file: ");
+        final String propFile = new ConsoleInputReader().readInput();
 
-            final VelocityEngine engine = new VelocityEngine();
-            engine.init();
+        final VelocityEngine engine = new VelocityEngine();
+        engine.init();
 
-            final VelocityContext context = new VelocityContext();
-            Template template = null; //NOPMD: null default, conditionally redefine.
-            try {
-                template = Velocity.getTemplate(TEMPLATE_FILE);
-            } catch (final ResourceNotFoundException e2) {
-                LOGGER.error("cannot find template " + TEMPLATE_FILE);
-            } catch (final ParseErrorException e) {
-                LOGGER.error("Syntax error in template : " + e);
-            }
-
-            final String classname = build(context, propFile);
-            final StringBuilder outputFile = new StringBuilder();
-            if (args.length > 1) {
-                final String outpath = args[1];
-
-                outputFile.append(outpath);
-                if (!outpath.endsWith(File.separator)) {
-                    outputFile.append(File.separator);
-                }
-            }
-            outputFile.append(classname).append(".java.gen");
-            final File opFile = new File(outputFile.toString());
-            if (opFile.exists()) {
-                opFile.delete();
-            }
-            final BufferedWriter writer = new BufferedWriter(new FileWriter(
-                opFile));
-            if (template != null) {
-                template.merge(context, writer);
-            }
-            writer.flush();
-            writer.close();
-
-            LOGGER.info("Output: " + outputFile.toString());
+        final VelocityContext context = new VelocityContext();
+        Template template = null; //NOPMD: null default, conditionally redefine.
+        try {
+            template = Velocity.getTemplate(TEMPLATE_FILE);
+        } catch (final ResourceNotFoundException e2) {
+            LOGGER.error("cannot find template " + TEMPLATE_FILE);
+        } catch (final ParseErrorException e) {
+            LOGGER.error("Syntax error in template : " + e);
         }
+
+        final String classname = build(context, propFile);
+        final StringBuilder outputFile = new StringBuilder();
+        if (args.length > 1) {
+            final String outpath = args[1];
+
+            outputFile.append(outpath);
+            if (!outpath.endsWith(File.separator)) {
+                outputFile.append(File.separator);
+            }
+        }
+        outputFile.append(classname).append(".java.gen");
+        final File opFile = new File(outputFile.toString());
+        if (opFile.exists()) {
+            opFile.delete();
+        }
+        final BufferedWriter writer = new BufferedWriter(new FileWriter(opFile));
+        if (template != null) {
+            template.merge(context, writer);
+        }
+        writer.flush();
+        writer.close();
+
+        LOGGER.info("Output: " + outputFile.toString());
+        //        }
     }
 
     /**
@@ -166,7 +172,8 @@ public class CastTemplateGenerator {
         try {
             final String result = resBundle.getString(Constant.ResourceKey.pair
                 .name() + "0");
-            final String[] string = getStrUtil().trimArray(result.split(":"));
+            getStrUtil();
+            final String[] string = StringUtil.trimArray(result.split(":"));
             context
                 .put(Constant.VelocityField.resultleft.getParam(), string[0]);
             context.put(
@@ -180,8 +187,8 @@ public class CastTemplateGenerator {
         return testName;
     }
 
-    private static void addVariableName(
-            final List<Map<String, Object>> varList, final String nextString)
+    private static void addVariableName(final List<Map<String, Object>> varList,
+                                        final String nextString)
     {
         final Map<String, Object> map = new HashMap<String, Object>();
 
@@ -203,6 +210,11 @@ public class CastTemplateGenerator {
     static StringUtil getStrUtil()
     {
         return STR_UTIL;
+    }
+
+    ConsoleInputReader getInputReader()
+    {
+        return inputReader;
     }
 
     /**
