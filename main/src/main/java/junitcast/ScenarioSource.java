@@ -73,8 +73,7 @@ public class ScenarioSource<S> {
      * @return null when Variable enum is not found.
      */
     @SuppressWarnings(Constant.Warning.UNCHECKED)
-    Class<? extends Enum<?>> findVariableEnum(
-            final AbstractTestCase<?, S> pTestCase)
+    Class<? extends Enum<?>> findVariableEnum(final AbstractTestCase<?, S> pTestCase)
     {
 
         Class<? extends Enum<?>> retval = null; //NOPMD: null default, conditionally redefine.
@@ -101,7 +100,8 @@ public class ScenarioSource<S> {
      * @param <T> transient key.
      */
     public <C extends Enum<C>, T> void addTransientCase(final T key,
-            final CaseParser caseParser, final C... cases)
+                                                        final CaseParser caseParser,
+                                                        final C... cases)
     {
         addTransientCase(key, (Object) caseParser, cases);
     }
@@ -117,7 +117,7 @@ public class ScenarioSource<S> {
      * @param <T> transient key.
      */
     public <C extends Enum<C>, T> void addTransientCaseName(final T key,
-            final C... cases)
+                                                            final C... cases)
     {
         checkValidTestCase(cases);
         for (final C nextCase : cases) {
@@ -137,7 +137,8 @@ public class ScenarioSource<S> {
      * @param <T> transient key.
      */
     public <C extends Enum<C>, T> void addTransientCase(final T key,
-            final Object value, final C... cases)
+                                                        final Object value,
+                                                        final C... cases)
     {
         assert cases != null;
         assert cases.length > 0;
@@ -148,7 +149,8 @@ public class ScenarioSource<S> {
     }
 
     <T, C extends Enum<C>> CaseObserver<S> createNewCase(final C nextCase,
-            final T key, final Object value)
+                                                         final T key,
+                                                         final Object value)
     {
         assert testCase instanceof AbstractTransientValueTestCase;
 
@@ -221,7 +223,7 @@ public class ScenarioSource<S> {
             @SuppressWarnings(Constant.Warning.UNCHECKED)
             final Enum<?> nextEnum = Enum.valueOf(this.enumType, nextCase
                 .toString()
-                .replaceAll(" ", "_"));
+                .replaceAll(" ", ""));
 
             final List<CaseObserver<S>> caseObsList = this.enumObsMap
                 .get(nextEnum);

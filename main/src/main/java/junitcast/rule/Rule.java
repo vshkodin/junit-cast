@@ -150,7 +150,7 @@ public class Rule {
         for (final String key : actionRuleMap.keySet()) {
 
             final String clause = actionRuleMap.get(key);
-            if (clause.contains(andedScen)) {
+            if (clause.equals(andedScen)) {
                 return key;
             }
         }

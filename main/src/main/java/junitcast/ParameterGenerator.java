@@ -83,8 +83,7 @@ public class ParameterGenerator<T> {
     /**
      * @param fixTureList list of test cases.
      */
-    public Collection<Object[]> generateData(
-            final List<CaseFixture<T>> fixTureList)
+    public Collection<Object[]> generateData(final List<CaseFixture<T>> fixTureList)
     {
         return generateData(fixTureList, true);
     }
@@ -96,8 +95,8 @@ public class ParameterGenerator<T> {
      *            combination of all variables.
      */
     @SuppressWarnings(Constant.Warning.UNCHECKED)
-    public Collection<Object[]> generateData(
-            final List<CaseFixture<T>> fixTureList, final boolean isComputed)
+    public Collection<Object[]> generateData(final List<CaseFixture<T>> fixTureList,
+                                             final boolean isComputed)
     {
         final List<Object[]> retval = new ArrayList<Object[]>();
         for (final CaseFixture<T> caseFixture : fixTureList) {
@@ -114,7 +113,7 @@ public class ParameterGenerator<T> {
                 @Override
                 @SuppressWarnings("PMD.UseVarargs")
                 public int compare(final Object[] paramArr1,
-                        final Object[] paramArr2)
+                                   final Object[] paramArr2)
                 {
                     final Parameter<T> param1 = (Parameter<T>) paramArr1[0];
                     final Parameter<T> param2 = (Parameter<T>) paramArr2[0];
@@ -132,7 +131,7 @@ public class ParameterGenerator<T> {
      * @param caseFixture the case fixture.
      */
     private void addCase(final List<Object[]> paramCollection,
-            final CaseFixture<T> caseFixture)
+                         final CaseFixture<T> caseFixture)
     {
         final ListMerger<T> listCombinator = new ListMerger<T>();
         final List<List<T>> combinations = listCombinator.merge(caseFixture
@@ -158,7 +157,7 @@ public class ParameterGenerator<T> {
      */
     @SuppressWarnings(Constant.Warning.UNCHECKED)
     private void addFixedCase(final List<Object[]> paramCollection,
-            final CaseFixture<T> caseFixture)
+                              final CaseFixture<T> caseFixture)
     {
         for (final List<T> scenario : caseFixture.getVariables()) {
             @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
@@ -168,7 +167,11 @@ public class ParameterGenerator<T> {
             final String result = caseFixture.getRule().getRuleAction(
                 (List<String>) scenario);
 
-            assert result != null;
+            Assert.assertNotNull(
+                "Scenario must fall into a unique rule output/clause: "
+                        + scenario + " did not match",
+                result);
+
             paramCollection.add(new Object[] { new Parameter<T>(caseFixture //NOPMD: False positive.
                 .getCaseDesc(), (List<T>) scenList, result, caseFixture
                 .getCaseId()) });
@@ -184,7 +187,7 @@ public class ParameterGenerator<T> {
      * @param fixture test fixture.
      */
     public String validateRule(final List<T> scenario,
-            final CaseFixture<T> fixture)
+                               final CaseFixture<T> fixture)
     {
         final Rule rule = fixture.getRule();
 
@@ -225,7 +228,7 @@ public class ParameterGenerator<T> {
      * @param expected expected output.
      */
     String getBinaryOutput(final String ruleOutput,
-            final CaseFixture<T> fixture, final boolean expected)
+                           final CaseFixture<T> fixture, final boolean expected)
     {
         final boolean isNegative = fixture.getPairMap().containsKey(ruleOutput);
         String actualOutput;
@@ -268,7 +271,7 @@ public class ParameterGenerator<T> {
      */
     @SuppressWarnings("PMD.BooleanInversion")
     private boolean isValidCase(final List<T> scenario,
-            final CaseFixture<T> fixture)
+                                final CaseFixture<T> fixture)
     {
         boolean valid;
         if (fixture.getExemptRule() == null) {

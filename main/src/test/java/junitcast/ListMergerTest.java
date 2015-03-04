@@ -54,7 +54,7 @@ public class ListMergerTest
     public static Collection<Object[]> generateData()
     {
         return new ParameterGenerator<String>()
-            .genVarData("junitcast.SetMergerTest");
+            .genVarData("junitcast.ListMergerTest");
     }
 
     /** {@inheritDoc} */
@@ -111,11 +111,10 @@ public class ListMergerTest
         for (final String scenToken : getParameter().getScenario()) {
 
 
-            final Pattern pattern = Pattern.compile("\\w* \\d(x\\d)*$");
+            final Pattern pattern = Pattern.compile("[a-z]+_\\d(x\\d)*$");
             final Matcher matcher = pattern.matcher(scenToken);
             if (matcher.find()) {
-                final Variable currentVar = Variable.valueOf(scenToken
-                    .replaceAll(" ", "_"));
+                final Variable currentVar = Variable.valueOf(scenToken);
 
                 source.addTransientCase(
                     0,
@@ -131,7 +130,7 @@ public class ListMergerTest
     private List<List<String>> createListOfSet(final String scenToken)
     {
         final String indecesRaw = scenToken
-            .substring(scenToken.indexOf(' ') + 1);
+            .substring(scenToken.indexOf('_') + 1);
         final String[] indeces = indecesRaw.split("x");
         final List<List<String>> listOfList = new ArrayList<List<String>>();
         for (final String index : indeces) {
