@@ -68,9 +68,6 @@ public class CastTemplateGenerator {
     static final String TEMPLATE_FILE = "./src/main/java/junitcast/tool/GenericTest.vm";
 
     /** */
-    private static final StringUtil STR_UTIL = new StringUtil();
-
-    /** */
     private final transient ConsoleInputReader inputReader = new ConsoleInputReader();
 
 
@@ -172,7 +169,6 @@ public class CastTemplateGenerator {
         try {
             final String result = resBundle.getString(Constant.ResourceKey.pair
                 .name() + "0");
-            getStrUtil();
             final String[] string = StringUtil.trimArray(result.split(":"));
             context
                 .put(Constant.VelocityField.resultleft.getParam(), string[0]);
@@ -205,11 +201,6 @@ public class CastTemplateGenerator {
         map.put(Constant.VelocityField.var.getParam(), var);
         map.put(Constant.VelocityField.kase.getParam(), kaso);
         varList.add(map);
-    }
-
-    static StringUtil getStrUtil()
-    {
-        return STR_UTIL;
     }
 
     ConsoleInputReader getInputReader()
