@@ -20,7 +20,11 @@ package junitcast.util;
  * 
  * @author Royce Remulla
  */
+@SuppressWarnings("PMD.ClassWithOnlyPrivateConstructorsShouldBeFinal" /* For easy testability. */)
 public class StringUtil {
+
+    /** Utility class. */
+    private StringUtil() {}
 
     /**
      * Trims the String content on an array of String.

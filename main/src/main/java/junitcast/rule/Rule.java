@@ -16,9 +16,12 @@
 package junitcast.rule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import junitcast.util.StringUtil;
 
 /**
  * Represents a logical rule.
@@ -148,9 +151,11 @@ public class Rule {
             .replaceAll(", ", "&");
 
         for (final String key : actionRuleMap.keySet()) {
-
             final String clause = actionRuleMap.get(key);
-            if (clause.equals(andedScen)) {
+
+            final List<String> orListClause = Arrays.asList(StringUtil
+                .trimArray(clause.split("\\|")));
+            if (orListClause.contains(andedScen)) {
                 return key;
             }
         }

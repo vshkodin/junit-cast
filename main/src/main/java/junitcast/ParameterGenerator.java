@@ -163,10 +163,26 @@ public class ParameterGenerator<T> {
             @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             final List<?> scenList = new ArrayList<Object>(scenario);
 
-            //            final String result = validateRule((List<T>) scenList, caseFixture);
-            final String result = caseFixture.getRule().getRuleAction(
+            final String matched = caseFixture.getRule().getRuleAction(
                 (List<String>) scenario);
 
+            String result;
+            if (matched == null) {
+
+                final boolean isPaired = !caseFixture.getPairMap().isEmpty();
+                if (isPaired) {
+                    result = caseFixture
+                        .getPairMap()
+                        .values()
+                        .iterator()
+                        .next();
+                } else {
+                    result = matched;
+                }
+
+            } else {
+                result = matched;
+            }
             Assert.assertNotNull(
                 "Scenario must fall into a unique rule output/clause: "
                         + scenario + " did not match",

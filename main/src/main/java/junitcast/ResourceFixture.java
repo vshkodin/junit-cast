@@ -43,9 +43,6 @@ import junitcast.util.StringUtil;
 public class ResourceFixture {
 
 
-    /** String utilities dependency. */
-    private final transient StringUtil stringUtil = new StringUtil();
-
     /** Set of Cases. */
     private final transient Set<String> casesSet = new LinkedHashSet<String>();
 
@@ -247,7 +244,8 @@ public class ResourceFixture {
      * @param separator values separator.
      */
     List<List<Object>> fetchVariables(final ResourceBundle resBundle,
-            final int caseIndex, final String key, final String separator)
+                                      final int caseIndex, final String key,
+                                      final String separator)
     {
         return fetchVariables(resBundle, caseIndex, key, separator, null);
     }
@@ -260,8 +258,9 @@ public class ResourceFixture {
      * @param converters element type converter.
      */
     List<List<Object>> fetchVariables(final ResourceBundle resBundle,
-            final int caseIndex, final String key, final String separator,
-            final String converters)
+                                      final int caseIndex, final String key,
+                                      final String separator,
+                                      final String converters)
     {
 
         List<List<Object>> retval;
@@ -288,14 +287,15 @@ public class ResourceFixture {
      * @param converters element type converter.
      */
     List<List<Object>> extractCombinations(final int caseIndex,
-            final String commonVarRaw, final String separator,
-            final String converters)
+                                           final String commonVarRaw,
+                                           final String separator,
+                                           final String converters)
     {
-        final String[] rawGroup = getStringUtil().trimArray(
-            commonVarRaw.split("\\|"));
+        final String[] rawGroup = StringUtil.trimArray(commonVarRaw
+            .split("\\|"));
 
         String[] converterArr;
-        if (getStringUtil().hasValue(converters)) {
+        if (StringUtil.hasValue(converters)) {
             converterArr = converters.split("\\|");
         } else {
             converterArr = new String[rawGroup.length];
@@ -312,8 +312,8 @@ public class ResourceFixture {
             elConvList.add(elConvert);
 
             if (!"".equals(nextGroup)) {
-                final String[] nextGroupArr = getStringUtil().trimArray(
-                    nextGroup.split(separator));
+                final String[] nextGroupArr = StringUtil.trimArray(nextGroup
+                    .split(separator));
                 if (caseIndex > -1) { //TODO: Unsupported typed common variables.
                     for (final String string : nextGroupArr) {
                         final Map<String, ElementConverter> ruleTokenMap = this.ruleTokConverter
@@ -376,7 +376,7 @@ public class ResourceFixture {
      * @param converter element converter.
      */
     List<Object> convert(final String[] nextGroupArr,
-            final ElementConverter converter)
+                         final ElementConverter converter)
     {
         final List<Object> retval = new ArrayList<Object>();
         for (final String string : nextGroupArr) {
@@ -412,7 +412,7 @@ public class ResourceFixture {
                     && !"".equals(resBundle.getString(key).trim())) {
                 final String raw = resBundle.getString(key);
                 getAttrList().add(
-                    Arrays.asList(getStringUtil().trimArray(raw.split(","))));
+                    Arrays.asList(StringUtil.trimArray(raw.split(","))));
             } else {
                 final String caseId = getCaseList().toArray(
                     new String[getCaseList().size()])[i];
@@ -445,19 +445,19 @@ public class ResourceFixture {
                 caseExempt = resBundle.getString(key);
             }
 
-            if (getStringUtil().hasValue(commonExempt)
-                    && getStringUtil().hasValue(caseExempt)) {
+            if (StringUtil.hasValue(commonExempt)
+                    && StringUtil.hasValue(caseExempt)) {
                 exemptRule.append('(');
                 exemptRule.append(commonExempt);
                 exemptRule.append(")|");
                 exemptRule.append(caseExempt);
-            } else if (getStringUtil().hasValue(caseExempt)) {
+            } else if (StringUtil.hasValue(caseExempt)) {
                 exemptRule.append(caseExempt);
-            } else if (getStringUtil().hasValue(commonExempt)) {
+            } else if (StringUtil.hasValue(commonExempt)) {
                 exemptRule.append(commonExempt);
             }
 
-            if (getStringUtil().hasValue(exemptRule.toString())) {
+            if (StringUtil.hasValue(exemptRule.toString())) {
                 getCaseExemptMap().put(i, exemptRule.toString());
             }
         }
@@ -521,13 +521,6 @@ public class ResourceFixture {
         return this.attrList;
     }
 
-    /**
-     * @return the stringUtil
-     */
-    public StringUtil getStringUtil()
-    {
-        return this.stringUtil;
-    }
 
     /**
      * @return the caseExempMap
