@@ -100,8 +100,8 @@ public class ListMerger<E> {
             "unchecked",
             "PMD.AvoidInstantiatingObjectsInLoops" })
     <T> void combineSuceeding(final List<List<T>> uncombinedList,
-            final List<List<T>> mergedList, final int[] indexArr,
-            final int mergeMaxIndex)
+                              final List<List<T>> mergedList,
+                              final int[] indexArr, final int mergeMaxIndex)
     {
         List<T> combination;
         for (int i = 0; i < mergeMaxIndex; i++) {
@@ -116,6 +116,9 @@ public class ListMerger<E> {
                 if (indexArr[indexArrIdx] < currentListSize - 1) {
                     indexArr[indexArrIdx] = indexArr[indexArrIdx] + 1;
                     found = true;
+                } else {
+                    indexArr[indexArrIdx] = 0;
+
                 }
             }
             for (int j = 0; j < indexArr.length; j++) {
