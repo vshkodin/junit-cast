@@ -169,17 +169,9 @@ public class ParameterGenerator<T> {
             String result;
             if (matched == null) {
 
-                final boolean isPaired = !caseFixture.getPairMap().isEmpty();
-                if (isPaired) {
-                    result = caseFixture
-                        .getPairMap()
-                        .values()
-                        .iterator()
-                        .next();
-                } else {
-                    result = matched;
-                }
+                assert !caseFixture.getPairMap().isEmpty() : "Unmatched result is applicable only to binary result";
 
+                result = caseFixture.getPairMap().values().iterator().next();
             } else {
                 result = matched;
             }

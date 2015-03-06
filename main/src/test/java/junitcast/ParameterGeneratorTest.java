@@ -65,7 +65,7 @@ public class ParameterGeneratorTest
     enum Variable {
 
         /** */
-        Init, Negative, Positive, Matched_Expected, Missed_Expected
+        Init, Negative, Positive, Match_Expected, Miss_Expected
     }
 
     /** */
@@ -88,24 +88,29 @@ public class ParameterGeneratorTest
     {
         final List<CaseFixture<String>> fixTureList = new ArrayList<CaseFixture<String>>();
         final List<List<String>> variables = new ArrayList<List<String>>();
+
         variables.add(new ArrayList<String>(Arrays
             .asList(new String[] { Variable.Init.name() })));
+
         variables.add(new ArrayList<String>(Arrays.asList(new String[] {
                 Variable.Negative.name(),
                 Variable.Positive.name() })));
+
         variables.add(new ArrayList<String>(Arrays.asList(new String[] {
-                Variable.Matched_Expected.name(),
-                Variable.Missed_Expected.name() })));
+                Variable.Match_Expected.name(),
+                Variable.Miss_Expected.name() })));
 
         final StringBuilder ruleBuilder = new StringBuilder()
             .append(TEST_NEG)
             .append(':')
-            .append(
-                Variable.Negative.name() + '&'
-                        + Variable.Matched_Expected.name())
-            .append('|');
-        ruleBuilder.append(Variable.Positive.name() + '&'
-                + Variable.Missed_Expected.name());
+            .append(Variable.Negative.name())
+            .append('&')
+            .append(Variable.Match_Expected.name())
+            .append('|')
+            .append(Variable.Positive.name())
+            .append('&')
+            .append(Variable.Miss_Expected.name());
+
         fixTureList.add(new CaseFixture<String>(
             "getBinaryAction",
             variables,
@@ -149,8 +154,8 @@ public class ParameterGeneratorTest
         //@formatter:off 
         source.addTransientCase(Trans.Output, TEST_NEG, Variable.Negative);
         source.addTransientCase(Trans.Output, TEST_POS, Variable.Positive);
-        source.addTransientCase(Trans.Expected, true, Variable.Matched_Expected);
-        source.addTransientCase(Trans.Expected, false, Variable.Missed_Expected);
+        source.addTransientCase(Trans.Expected, true, Variable.Match_Expected);
+        source.addTransientCase(Trans.Expected, false, Variable.Miss_Expected);
         //@formatter:on 
 
         source.notifyObservers();
