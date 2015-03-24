@@ -78,7 +78,7 @@ public class SimpleDividerTest extends
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         final int dividend = getTransientValue(0);
         final int divisor = getTransientValue(1);
@@ -87,7 +87,6 @@ public class SimpleDividerTest extends
         } catch (final IllegalArgumentException iae) {
             setResult("ERROR");
         }
-        return getResult().toString();
     }
 
 }

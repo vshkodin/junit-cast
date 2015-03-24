@@ -31,7 +31,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 /**
  * Test class for StringUtil.
- * 
+ *
  * @author Royce Remulla
  */
 public class StringUtilTest extends
@@ -71,7 +71,7 @@ public class StringUtilTest extends
     }
 
     @Override
-    protected Object execute()
+    protected void execute()
     {
         Object retval = null; //NOPMD: null default, conditionally redefine.
         try {
@@ -105,7 +105,7 @@ public class StringUtilTest extends
         } catch (final NoSuchMethodException e) {
             Assert.fail(e.getMessage());
         }
-        return retval;
+        setResult(retval);
     }
 
     /** {@inheritDoc} */

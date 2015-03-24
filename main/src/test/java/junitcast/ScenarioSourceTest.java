@@ -38,10 +38,8 @@ public class ScenarioSourceTest {
             {}
 
             @Override
-            protected Object execute()
-            {
-                return null;
-            }
+            protected void execute()
+            {}
         });
 
     /** */
@@ -58,10 +56,8 @@ public class ScenarioSourceTest {
             {}
 
             @Override
-            protected Object execute()
-            {
-                return null;
-            }
+            protected void execute()
+            {}
         });
 
 
@@ -69,28 +65,28 @@ public class ScenarioSourceTest {
     @Test(expected = IllegalArgumentException.class)
     public void checkValidTestCase_nullTest()
     {
-        sut.checkValidTestCase(null);
+        this.sut.checkValidTestCase(null);
     }
 
     /** Empty Case. */
     @Test(expected = IllegalArgumentException.class)
     public void checkValidTestCase_emptyTest()
     {
-        sut.checkValidTestCase(new Enum[0]);
+        this.sut.checkValidTestCase(new Enum[0]);
     }
 
     /** Not a sub class of Transient class. */
     @Test(expected = UnsupportedOperationException.class)
     public void checkValidTestCase_nonTransientTest()
     {
-        sut.checkValidTestCase(new TestEnum[] { TestEnum.Item1 });
+        this.sut.checkValidTestCase(new TestEnum[] { TestEnum.Item1 });
     }
 
     /**  */
     @Test
     public void createNewCase_caseParserTest()
     {
-        final CaseObserver<String> caseObs = sutTrans.createNewCase(
+        final CaseObserver<String> caseObs = this.sutTrans.createNewCase(
             null,
             null,
             new CaseParser() {
@@ -110,8 +106,8 @@ public class ScenarioSourceTest {
     @Test
     public void toStringTest()
     {
-        Assert.assertEquals(sut.getClass().getSimpleName()
-                + "[] Observer size: 0", sut.toString());
+        Assert.assertEquals(this.sut.getClass().getSimpleName()
+                + "[] Observer size: 0", this.sut.toString());
 
     }
 

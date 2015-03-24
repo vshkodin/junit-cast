@@ -164,14 +164,13 @@ public class ParameterTest extends
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         if (getMockSubject() == null) {
             setResult("ERROR");
         } else {
             setResult("GOOD");
         }
-        return getResult();
     }
 
 }

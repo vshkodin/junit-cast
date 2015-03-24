@@ -33,7 +33,7 @@ import org.junit.runners.Parameterized.Parameters;
  * @author Royce Remulla.
  */
 public class SimpleDividerTypedTest extends
-AbstractTransientValueTestCase<SimpleDivider, Integer, Integer> {
+        AbstractTransientValueTestCase<SimpleDivider, Integer, Integer> {
 
     /**
      * @param pParameter Data Transfer Object Parameter in Parameterized test.
@@ -74,7 +74,7 @@ AbstractTransientValueTestCase<SimpleDivider, Integer, Integer> {
     }
 
     @Override
-    protected Object execute()
+    protected void execute()
     {
         final int dividend = getTransientValue(0);
         final int divisor = getTransientValue(1);
@@ -83,7 +83,6 @@ AbstractTransientValueTestCase<SimpleDivider, Integer, Integer> {
         } catch (final IllegalArgumentException iae) {
             setResult("ERROR");
         }
-        return getResult().toString();
     }
 
 }

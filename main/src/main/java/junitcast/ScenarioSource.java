@@ -91,11 +91,11 @@ public class ScenarioSource<S> {
 
     /**
      * Convenience method to set transient value on a test case.
-     * 
+     *
      * @param key transient key/name.
      * @param caseParser case parser instance. Must not be null.
      * @param cases applicable Variable cases.
-     * 
+     *
      * @param <C> case enum.
      * @param <T> transient key.
      */
@@ -109,10 +109,10 @@ public class ScenarioSource<S> {
     /**
      * Convenience method to set transient value on a test case using the case
      * name.
-     * 
+     *
      * @param key transient key/name.
      * @param cases applicable Variable cases.
-     * 
+     *
      * @param <C> case enum.
      * @param <T> transient key.
      */
@@ -128,11 +128,11 @@ public class ScenarioSource<S> {
 
     /**
      * Convenience method to set transient value on a test case.
-     * 
+     *
      * @param key transient key/name.
      * @param value transient value to set.
      * @param cases applicable Variable cases.
-     * 
+     *
      * @param <C> case enum.
      * @param <T> transient key.
      */
@@ -152,7 +152,7 @@ public class ScenarioSource<S> {
                                                          final T key,
                                                          final Object value)
     {
-        assert testCase instanceof AbstractTransientValueTestCase;
+        assert this.testCase instanceof AbstractTransientValueTestCase;
 
         return new CaseObserver<S>() {
 
@@ -167,7 +167,7 @@ public class ScenarioSource<S> {
                     valueCalc = value;
                 }
                 @SuppressWarnings(Constant.Warning.UNCHECKED)
-                final AbstractTransientValueTestCase<?, S, Object> transCase = (AbstractTransientValueTestCase<?, S, Object>) testCase;
+                final AbstractTransientValueTestCase<?, S, Object> transCase = (AbstractTransientValueTestCase<?, S, Object>) ScenarioSource.this.testCase;
                 transCase.setTransientValue(key, valueCalc);
             }
         };
@@ -234,15 +234,18 @@ public class ScenarioSource<S> {
                 }
             }
         }
+
+        this.enumObsMap.clear();
     }
+
 
     /** {@inheritDoc} */
     @Override
     public String toString()
     {
         return getClass().getSimpleName() + "["
-                + testCase.getClass().getSimpleName() + "] Observer size: "
-                + enumObsMap.size();
+                + this.testCase.getClass().getSimpleName()
+                + "] Observer size: " + this.enumObsMap.size();
     }
 
 }

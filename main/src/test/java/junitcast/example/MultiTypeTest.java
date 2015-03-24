@@ -107,14 +107,13 @@ public class MultiTypeTest extends
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         final MultiType.Position position = (Position) getTransientValue(Argument.Position
             .ordinal());
         final Double grade = (Double) getTransientValue(Argument.Grade
             .ordinal());
         getMockSubject().applyForJob(position, grade);
-        return getResult();
     }
 
     /** */

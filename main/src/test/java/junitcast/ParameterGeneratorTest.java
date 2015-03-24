@@ -151,26 +151,29 @@ public class ParameterGeneratorTest
         });
 
 
-        //@formatter:off 
+        //@formatter:off
         source.addTransientCase(Trans.Output, TEST_NEG, Variable.Negative);
         source.addTransientCase(Trans.Output, TEST_POS, Variable.Positive);
         source.addTransientCase(Trans.Expected, true, Variable.Match_Expected);
         source.addTransientCase(Trans.Expected, false, Variable.Miss_Expected);
-        //@formatter:on 
+        //@formatter:on
 
         source.notifyObservers();
     }
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         final String ruleOutput = (String) getTransientValue(Trans.Output);
         @SuppressWarnings("unchecked")
         final CaseFixture<String> fixture = (CaseFixture<String>) getTransientValue(Trans.Fixture);
         final boolean expected = (Boolean) getTransientValue(Trans.Expected);
 
-        return getMockSubject().getBinaryOutput(ruleOutput, fixture, expected);
+        setResult(getMockSubject().getBinaryOutput(
+            ruleOutput,
+            fixture,
+            expected));
     }
 
 }

@@ -156,7 +156,7 @@ public class ListMerger_getCountTest
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         final List<List<String>> param = getTransientValue(0);
         try {
@@ -165,8 +165,6 @@ public class ListMerger_getCountTest
         } catch (final IllegalArgumentException iae) {
             setResult("IAE");
         }
-        return getResult();
-
     }
 
 

@@ -80,13 +80,12 @@ public class WorkerBlogTest extends AbstractTestCase<Worker, String> {
 
     //Step 2. of the PEA pattern.
     @Override
-    protected Object execute() {
+    protected void execute() {
         if (getMockSubject().hasWork(null)) {
             setResult(Result.Go_to_work.value());
         } else {
             setResult(Result.Rest.value());
         }
-        return getResult();
     }
 
     //Step 3 (Assertion) of the PEA pattern is taken care of internally by the super class.

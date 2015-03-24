@@ -113,14 +113,13 @@ public class WorkerTest extends AbstractTestCase<Worker, String> {
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         if (getMockSubject().hasWork(null)) {
             setResult(Result.Go_to_work.value());
         } else {
             setResult(Result.Rest.value());
         }
-        return getResult();
     }
 
 }

@@ -69,10 +69,10 @@ public class LogicCheckerTest extends
     }
 
     @Override
-    protected Object execute()
+    protected void execute()
     {
-        return getMockSubject().and(
+        setResult(getMockSubject().and(
             getTransientValue(Argument.first.ordinal()),
-            getTransientValue(Argument.second.ordinal()));
+            getTransientValue(Argument.second.ordinal())));
     }
 }

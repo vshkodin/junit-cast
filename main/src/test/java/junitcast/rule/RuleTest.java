@@ -118,9 +118,9 @@ public class RuleTest extends
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
-        return getResult();
+        //constructor testing.
     }
 
 }

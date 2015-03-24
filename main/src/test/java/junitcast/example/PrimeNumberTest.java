@@ -72,7 +72,7 @@ public class PrimeNumberTest extends
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         try {
             setResult(String.valueOf(getMockSubject().isPrimeNumber(
@@ -80,7 +80,6 @@ public class PrimeNumberTest extends
         } catch (final IllegalArgumentException iae) {
             setResult("ERROR");
         }
-        return getResult();
     }
 
 }

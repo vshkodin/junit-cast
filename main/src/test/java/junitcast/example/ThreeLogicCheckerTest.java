@@ -29,7 +29,7 @@ import org.junit.runners.Parameterized.Parameters;
  * @author Royce Remulla
  */
 public class ThreeLogicCheckerTest extends
-AbstractTransientValueTestCase<ThreeLogicChecker, Boolean, Boolean> {
+        AbstractTransientValueTestCase<ThreeLogicChecker, Boolean, Boolean> {
 
     /**
      * @param pParameter Data Transfer Object Parameter in Parameterized test.
@@ -57,7 +57,7 @@ AbstractTransientValueTestCase<ThreeLogicChecker, Boolean, Boolean> {
     public static Collection<Object[]> generateData()
     {
         return new ParameterGenerator<Boolean>()
-                .genVarData("junitcast.example.ThreeLogicCheckerTest");
+            .genVarData("junitcast.example.ThreeLogicCheckerTest");
     }
 
     /** {@inheritDoc} */
@@ -72,11 +72,11 @@ AbstractTransientValueTestCase<ThreeLogicChecker, Boolean, Boolean> {
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
-        return String.valueOf(getMockSubject().evaluate(
+        setResult(String.valueOf(getMockSubject().evaluate(
             getTransientValue(0),
             getTransientValue(1),
-            getTransientValue(2)));
+            getTransientValue(2))));
     }
 }

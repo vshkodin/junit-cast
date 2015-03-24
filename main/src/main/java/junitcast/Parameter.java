@@ -92,7 +92,8 @@ public class Parameter<E> {
     }
 
     /**
-     * This will appear in the test runner grid.
+     * This will appear in the test runner grid. New lines break the test runner
+     * so we exclude them.
      *
      * @see {@link Object#toString()}
      * @return String representation of this instance.
@@ -100,12 +101,16 @@ public class Parameter<E> {
     @Override
     public String toString()
     {
-        final StringBuilder retval = new StringBuilder()
-        .append(getCaseDesc())
-        .append(": Expect=[")
-        .append(getExpected())
-        .append("], Scenario")
-        .append(getScenario());
+        final StringBuilder retval = new StringBuilder().append(getCaseDesc());
+
+        final boolean noNewLineExp = getExpected().indexOf('\n') < 0;
+        final boolean noNewLineScen = getScenario().toString().indexOf('\n') < 0;
+        if (noNewLineExp) {
+            retval.append(": Expect=[").append(getExpected()).append(']');
+        }
+        if (noNewLineScen) {
+            retval.append(": Scenario").append(getScenario());
+        }
 
         return retval.toString();
     }

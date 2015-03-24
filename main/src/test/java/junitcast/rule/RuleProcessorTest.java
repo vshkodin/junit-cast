@@ -38,7 +38,7 @@ import org.mockito.Mockito;
  * @author Royce Remulla
  */
 public class RuleProcessorTest extends
-AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
+        AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
 
     /**
      * @param pParameter Data Transfer Object Parameter in Parameterized test.
@@ -74,7 +74,7 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
     public static Collection<Object[]> generateData()
     {
         return new ParameterGenerator<String>()
-                .genVarData("junitcast.rule.RuleProcessorTest");
+            .genVarData("junitcast.rule.RuleProcessorTest");
     }
 
 
@@ -84,11 +84,11 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
     protected void prepare()
     {
         final RuleEvaluator<String> mockRuleEval = Mockito
-                .mock(RuleEvaluator.class);
+            .mock(RuleEvaluator.class);
         Mockito
-        .doReturn(mockRuleEval)
-        .when(getMockSubject())
-        .getRuleEvaluator((List<ElementConverter>) Matchers.any());
+            .doReturn(mockRuleEval)
+            .when(getMockSubject())
+            .getRuleEvaluator((List<ElementConverter>) Matchers.any());
 
 
         final ScenarioSource<String> scenSrc = new ScenarioSource<String>(this);
@@ -112,11 +112,11 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
             public void prepareCase(final String caseRaw)
             {
                 final CaseFixture<String> caseFix = Mockito
-                        .mock(CaseFixture.class);
+                    .mock(CaseFixture.class);
                 Mockito
-                .doReturn(new Rule("Visible:!Blind"))
-                .when(caseFix)
-                .getRule();
+                    .doReturn(new Rule("Visible:!Blind"))
+                    .when(caseFix)
+                    .getRule();
 
                 setTransientValue(Trans.CaseFixture, caseFix);
             }
@@ -130,9 +130,9 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
                 public void prepareCase(final String caseRaw)
                 {
                     Mockito
-                    .doThrow(new RuleEvaluatorException("Mock parse error"))
-                    .when(mockRuleEval)
-                    .parse(Matchers.anyString());
+                        .doThrow(new RuleEvaluatorException("Mock parse error"))
+                        .when(mockRuleEval)
+                        .parse(Matchers.anyString());
                 }
             });
 
@@ -144,8 +144,8 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
                 public void prepareCase(final String caseRaw)
                 {
                     Mockito
-                    .doThrow(
-                        new RuleEvaluatorException("Mock evaluate error"))
+                        .doThrow(
+                            new RuleEvaluatorException("Mock evaluate error"))
                         .when(mockRuleEval)
                         .parse(Matchers.anyString());
                 }
@@ -157,9 +157,9 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
             public void prepareCase(final String caseRaw)
             {
                 Mockito
-                .doReturn(true)
-                .when(mockRuleEval)
-                .evaluate((List<String>) Matchers.any(), Matchers.anyMap());
+                    .doReturn(true)
+                    .when(mockRuleEval)
+                    .evaluate((List<String>) Matchers.any(), Matchers.anyMap());
             }
         });
 
@@ -169,7 +169,7 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
-    protected Object execute()
+    protected void execute()
     {
         try {
             getMockSubject().evaluate(
@@ -183,7 +183,6 @@ AbstractTransientValueTestCase<RuleProcessor<String>, String, Object> {
         } catch (final RuleEvaluatorException ex) {
             setResult("Error");
         }
-        return getResult();
     }
 
     /** */

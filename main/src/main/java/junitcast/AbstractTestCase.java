@@ -69,7 +69,7 @@ public abstract class AbstractTestCase<T, E> {
         this.parameter = pParameter;
         if (getClass().getGenericSuperclass() instanceof ParameterizedType) {
             final ParameterizedType paramedType = (ParameterizedType) getClass()
-                    .getGenericSuperclass();
+                .getGenericSuperclass();
             Class<T> subjecType;
             final Type type = paramedType.getActualTypeArguments()[0];
             if (type instanceof ParameterizedType) {
@@ -80,7 +80,7 @@ public abstract class AbstractTestCase<T, E> {
             this.setSubjectType(subjecType);
         } else {
             throw new UnsupportedOperationException(
-                    "Must use parameterized sub type.");
+                "Must use parameterized sub type.");
         }
     }
 
@@ -88,7 +88,6 @@ public abstract class AbstractTestCase<T, E> {
     @Before
     public void setUp()
     {
-
 
 
         setupTargetObject(null);
@@ -121,7 +120,7 @@ public abstract class AbstractTestCase<T, E> {
      *
      * @return output matching the rule in the property file.
      */
-    protected abstract Object execute();
+    protected abstract void execute();
 
     /**
      * Assertion/Verification.
@@ -151,10 +150,10 @@ public abstract class AbstractTestCase<T, E> {
         prepare();
 
         //Execution.
-        final Object lresult = execute();
+        execute();
 
         //Assertion/Verification.
-        assertVerify(lresult);
+        assertVerify(getResult());
     }
 
     /**
