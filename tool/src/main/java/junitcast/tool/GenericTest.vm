@@ -80,12 +80,10 @@ public class $testname extends AbstractTransientValueTestCase<$classname, String
 
     /** {@inheritDoc} */
     @Override
-    protected Object execute()
+    protected void execute()
     {
         //TODO:
         setResult(getMockSubject().<callSutMethod>());
-        
-        return getResult();
     }
 
     /** */
