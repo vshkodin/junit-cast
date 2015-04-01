@@ -72,7 +72,7 @@ public class ScenarioSourceTest {
     @Test(expected = IllegalArgumentException.class)
     public void checkValidTestCase_emptyTest()
     {
-        this.sut.checkValidTestCase(new Enum[0]);
+        this.sut.checkValidTestCase(new TestEnum[0]);
     }
 
     /** Not a sub class of Transient class. */
