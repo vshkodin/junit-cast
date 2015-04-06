@@ -29,12 +29,6 @@
         </dependency>
 
         <dependency>
-            <groupId>ph.rye</groupId>
-            <artifactId>junit-cast</artifactId>
-            <version>0.6-BETA-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.6</version>

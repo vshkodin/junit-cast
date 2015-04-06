@@ -27,8 +27,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import junitcast.util.StringUtil;
-
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -39,17 +37,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ph.rye.common.io.ConsoleInputReader;
+import ph.rye.common.lang.StringUtil;
 
 
 /**
  * Use to generate template test case file based on JUnitCast property file.
- * 
+ *
  * <pre>
- * $Author$ 
- * $Date$ 
+ * $Author$
+ * $Date$
  * $HeadURL$
  * </pre>
- * 
+ *
  * @author r39
  */
 public class CastTemplateGenerator {
@@ -65,17 +64,19 @@ public class CastTemplateGenerator {
 
 
     /** Velocity Template file. */
-    static final String TEMPLATE_FILE = "./src/main/java/junitcast/tool/GenericTest.vm";
+    static final String TEMPLATE_FILE =
+            "./src/main/java/junitcast/tool/GenericTest.vm";
 
     /** */
-    private final transient ConsoleInputReader inputReader = new ConsoleInputReader();
+    private final transient ConsoleInputReader inputReader =
+            new ConsoleInputReader();
 
 
     /**
      * Command line utility.
-     * 
+     *
      * Usage: GenerateTestCase <resource name> <optional destination directory>
-     * 
+     *
      * @param args Pass the resource path
      * @throws IOException when File IO exception occurs.
      */
@@ -118,7 +119,8 @@ public class CastTemplateGenerator {
         if (opFile.exists()) {
             opFile.delete();
         }
-        final BufferedWriter writer = new BufferedWriter(new FileWriter(opFile));
+        final BufferedWriter writer =
+                new BufferedWriter(new FileWriter(opFile));
         if (template != null) {
             template.merge(context, writer);
         }
@@ -131,7 +133,7 @@ public class CastTemplateGenerator {
 
     /**
      * Build and return the test class simple name.
-     * 
+     *
      * @param context velocity context instance.
      * @param propFile property file to process.
      */
@@ -143,8 +145,8 @@ public class CastTemplateGenerator {
         final String pkg = propFile.substring(0, propFile.lastIndexOf('.'));
         context.put(Constant.VelocityField.pkg.getParam(), pkg);
 
-        final String testName = propFile
-            .substring(propFile.lastIndexOf('.') + 1);
+        final String testName =
+                propFile.substring(propFile.lastIndexOf('.') + 1);
         String className;
         if (testName.indexOf('_') > -1) {
             className = testName.substring(0, testName.indexOf('_'));
@@ -155,10 +157,11 @@ public class CastTemplateGenerator {
         context.put(Constant.VelocityField.classname.getParam(), className);
         context.put(Constant.VelocityField.testname.getParam(), testName);
 
-        final List<Map<String, Object>> varList = new ArrayList<Map<String, Object>>();
+        final List<Map<String, Object>> varList =
+                new ArrayList<Map<String, Object>>();
         context.put(Constant.VelocityField.varlist.getParam(), varList);
-        final String varRaw = resBundle.getString(Constant.ResourceKey.var
-            .name() + "0");
+        final String varRaw =
+                resBundle.getString(Constant.ResourceKey.var.name() + "0");
 
         for (final String nextVarSet : varRaw.split("\\|")) {
             for (final String nextVarName : nextVarSet.trim().split(",")) {
@@ -167,8 +170,8 @@ public class CastTemplateGenerator {
         }
 
         try {
-            final String result = resBundle.getString(Constant.ResourceKey.pair
-                .name() + "0");
+            final String result =
+                    resBundle.getString(Constant.ResourceKey.pair.name() + "0");
             final String[] string = StringUtil.trimArray(result.split(":"));
             context
                 .put(Constant.VelocityField.resultleft.getParam(), string[0]);
@@ -205,7 +208,7 @@ public class CastTemplateGenerator {
 
     ConsoleInputReader getInputReader()
     {
-        return inputReader;
+        return this.inputReader;
     }
 
     /**
