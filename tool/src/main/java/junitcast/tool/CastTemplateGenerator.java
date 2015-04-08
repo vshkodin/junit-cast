@@ -114,7 +114,7 @@ public class CastTemplateGenerator {
                 outputFile.append(File.separator);
             }
         }
-        outputFile.append(classname).append(".java.gen");
+        outputFile.append(classname).append(".java");
         final File opFile = new File(outputFile.toString());
         if (opFile.exists()) {
             opFile.delete();

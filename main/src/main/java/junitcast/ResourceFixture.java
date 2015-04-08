@@ -50,34 +50,41 @@ public class ResourceFixture {
      * Cases (OAS), Variables (Value Presence, Duplication, etc), Combinations
      * (No Value, Has Value).
      */
-    private final transient List<List<List<Object>>> caseVarList = new ArrayList<List<List<Object>>>();
+    private final transient List<List<List<Object>>> caseVarList =
+            new ArrayList<List<List<Object>>>();
 
     /**
      * Cases (OAS), Variables (Value Presence, Duplication, etc), Combinations
      * (No Value, Has Value).
      */
-    private final transient List<List<ElementConverter>> caseConverterList = new ArrayList<List<ElementConverter>>();
+    private final transient List<List<ElementConverter>> caseConverterList =
+            new ArrayList<List<ElementConverter>>();
 
     /** Case to List of Rules. */
     private final transient List<String> ruleList = new ArrayList<String>();
 
     /** */
-    private final transient List<Map<String, ElementConverter>> ruleTokConverter = new ArrayList<Map<String, ElementConverter>>();
+    private final transient List<Map<String, ElementConverter>> ruleTokConverter =
+            new ArrayList<Map<String, ElementConverter>>();
 
     /** Case to List of Attributes. */
-    private final transient List<List<String>> attrList = new ArrayList<List<String>>();
+    private final transient List<List<String>> attrList =
+            new ArrayList<List<String>>();
 
     /** Cases index, Set of exempt rules. */
-    private final transient Map<Integer, String> caseExemptMap = new HashMap<Integer, String>();
+    private final transient Map<Integer, String> caseExemptMap =
+            new HashMap<Integer, String>();
 
     /** Pair mapping for binary cases. */
-    private final transient Map<Integer, String> listPairMap = new HashMap<Integer, String>();
+    private final transient Map<Integer, String> listPairMap =
+            new HashMap<Integer, String>();
 
     /** Can be set in resource to skip prior indexes to speed up testing. */
     private transient int debugStart;
 
     /** Converter map. */
-    private static Map<Class<? extends ElementConverter>, ElementConverter> convertMap = new HashMap<Class<? extends ElementConverter>, ElementConverter>();
+    private static Map<Class<? extends ElementConverter>, ElementConverter> convertMap =
+            new HashMap<Class<? extends ElementConverter>, ElementConverter>();
 
     /** */
     private final transient String resourceUri;
@@ -115,11 +122,12 @@ public class ResourceFixture {
      */
     void generateCases()
     {
-        final ResourceBundle resBundle = ResourceBundle.getBundle(
-            this.resourceUri,
-            Locale.getDefault(),
-            ResourceBundle.Control
-                .getControl(ResourceBundle.Control.FORMAT_PROPERTIES));
+        final ResourceBundle resBundle =
+                ResourceBundle.getBundle(
+                    this.resourceUri,
+                    Locale.getDefault(),
+                    ResourceBundle.Control
+                        .getControl(ResourceBundle.Control.FORMAT_PROPERTIES));
         initCases(resBundle);
         initVars(resBundle);
         initRules(resBundle);
@@ -135,14 +143,14 @@ public class ResourceFixture {
     public List<?> getFixtures()
     {
         generateCases();
-        final List<CaseFixture<String>> retval = new ArrayList<CaseFixture<String>>(
-            getCaseList().size());
+        final List<CaseFixture<String>> retval =
+                new ArrayList<CaseFixture<String>>(getCaseList().size());
 
         for (int i = 0; i < getCaseList().size(); i++) {
             final int index = i;
 
-            final String caseDesc = getCaseList().toArray(
-                new String[getCaseList().size()])[index];
+            final String caseDesc =
+                    getCaseList().toArray(new String[getCaseList().size()])[index];
             final List<List<Object>> variables = getVarList().get(index);
 
             final Rule rule = new Rule(getRuleList().get(index));
@@ -168,8 +176,8 @@ public class ResourceFixture {
     final void initCases(final ResourceBundle resBundle)
     {
         if (resBundle.containsKey(ResourceKey.debug_index.name())) {
-            final String debugStartStr = resBundle.getString(
-                ResourceKey.debug_index.name()).trim();
+            final String debugStartStr =
+                    resBundle.getString(ResourceKey.debug_index.name()).trim();
             try {
                 this.debugStart = Integer.valueOf(debugStartStr);
             } catch (final NumberFormatException e) {
@@ -200,11 +208,12 @@ public class ResourceFixture {
     {
         List<List<Object>> commonVars;
         if (resBundle.containsKey(ResourceKey.commonvar.name())) {
-            commonVars = fetchVariables(
-                resBundle,
-                -1,
-                ResourceKey.commonvar.name(),
-                ",");
+            commonVars =
+                    fetchVariables(
+                        resBundle,
+                        -1,
+                        ResourceKey.commonvar.name(),
+                        ",");
         } else {
             commonVars = new ArrayList<List<Object>>();
         }
@@ -221,14 +230,11 @@ public class ResourceFixture {
             }
 
             this.ruleTokConverter.add(new HashMap<String, ElementConverter>()); //NOPMD: False Positive.
-            final List<List<Object>> caseVariables = fetchVariables(
-                resBundle,
-                i,
-                varkey,
-                ",",
-                converters);
+            final List<List<Object>> caseVariables =
+                    fetchVariables(resBundle, i, varkey, ",", converters);
 
-            final Set<List<Object>> specificVars = new LinkedHashSet<List<Object>>(); //NOPMD: False Positive.
+            final Set<List<Object>> specificVars =
+                    new LinkedHashSet<List<Object>>(); //NOPMD: False Positive.
             caseVariables.addAll(commonVars);
 
             caseVariables.addAll(specificVars);
@@ -266,11 +272,12 @@ public class ResourceFixture {
         List<List<Object>> retval;
         if (resBundle.containsKey(key)) {
             final String commonVarRaw = resBundle.getString(key);
-            retval = extractCombinations(
-                caseIndex,
-                commonVarRaw,
-                separator,
-                converters);
+            retval =
+                    extractCombinations(
+                        caseIndex,
+                        commonVarRaw,
+                        separator,
+                        converters);
         } else {
             retval = new ArrayList<List<Object>>();
         }
@@ -291,8 +298,8 @@ public class ResourceFixture {
                                            final String separator,
                                            final String converters)
     {
-        final String[] rawGroup = StringUtil.trimArray(commonVarRaw
-            .split("\\|"));
+        final String[] rawGroup =
+                StringUtil.trimArray(commonVarRaw.split("\\|"));
 
         String[] converterArr;
         if (StringUtil.hasValue(converters)) {
@@ -302,7 +309,8 @@ public class ResourceFixture {
             Arrays.fill(converterArr, StrConverter.class.getName());
         }
 
-        final List<ElementConverter> elConvList = new ArrayList<ElementConverter>();
+        final List<ElementConverter> elConvList =
+                new ArrayList<ElementConverter>();
         this.caseConverterList.add(elConvList);
         final List<List<Object>> caseComb = new ArrayList<List<Object>>();
         for (int i = 0; i < rawGroup.length; i++) {
@@ -312,12 +320,12 @@ public class ResourceFixture {
             elConvList.add(elConvert);
 
             if (!"".equals(nextGroup)) {
-                final String[] nextGroupArr = StringUtil.trimArray(nextGroup
-                    .split(separator));
+                final String[] nextGroupArr =
+                        StringUtil.trimArray(nextGroup.split(separator));
                 if (caseIndex > -1) { //TODO: Unsupported typed common variables.
                     for (final String string : nextGroupArr) {
-                        final Map<String, ElementConverter> ruleTokenMap = this.ruleTokConverter
-                            .get(caseIndex);
+                        final Map<String, ElementConverter> ruleTokenMap =
+                                this.ruleTokConverter.get(caseIndex);
                         ruleTokenMap.put(string, elConvert);
                     }
                 }
@@ -338,8 +346,8 @@ public class ResourceFixture {
     {
         Class<ElementConverter> converterCls;
         try {
-            converterCls = (Class<ElementConverter>) Class
-                .forName(converterClsName);
+            converterCls =
+                    (Class<ElementConverter>) Class.forName(converterClsName);
         } catch (final ClassNotFoundException e1) {
             /** Custom class exception. */
             class ResourceFixtureException extends RuntimeException {
@@ -395,8 +403,8 @@ public class ResourceFixture {
         for (int i = 0; i < getCaseList().size(); i++) {
             final int actualIdx = i + this.debugStart;
 
-            final String ruleRaw = resBundle.getString(ResourceKey.rule.name()
-                    + actualIdx);
+            final String ruleRaw =
+                    resBundle.getString(ResourceKey.rule.name() + actualIdx);
             getRuleList().add(ruleRaw);
         }
     }
@@ -414,8 +422,8 @@ public class ResourceFixture {
                 getAttrList().add(
                     Arrays.asList(StringUtil.trimArray(raw.split(","))));
             } else {
-                final String caseId = getCaseList().toArray(
-                    new String[getCaseList().size()])[i];
+                final String caseId =
+                        getCaseList().toArray(new String[getCaseList().size()])[i];
                 getAttrList().add(Arrays.asList(new String[] { caseId }));
             }
         }
@@ -474,7 +482,7 @@ public class ResourceFixture {
             final String key = ResourceKey.pair.name() + i;
             if (resBundle.containsKey(key)) {
                 final String pairRaw = resBundle.getString(key);
-                this.listPairMap.put(i, pairRaw);
+                this.listPairMap.put(i, pairRaw.trim());
             }
         }
 
