@@ -45,7 +45,8 @@ public class ScenarioSource<S> {
 
     /** */
     @SuppressWarnings("rawtypes")
-    private final transient Map<Enum, List<CaseObserver<S>>> enumObsMap = new HashMap<Enum, List<CaseObserver<S>>>();
+    private final transient Map<Enum, List<CaseObserver<S>>> enumObsMap =
+            new HashMap<Enum, List<CaseObserver<S>>>();
 
     /** */
     @SuppressWarnings("rawtypes")
@@ -121,7 +122,12 @@ public class ScenarioSource<S> {
     {
         checkValidTestCase(cases);
         for (final C nextCase : cases) {
-            addTransientCase(key, nextCase.name(), cases);
+            if (this.testCase
+                .getParameter()
+                .getScenario()
+                .contains(nextCase.name())) {
+                addTransientCase(key, nextCase.name(), cases);
+            }
         }
     }
 
@@ -167,7 +173,8 @@ public class ScenarioSource<S> {
                     valueCalc = value;
                 }
                 @SuppressWarnings(Constant.Warning.UNCHECKED)
-                final AbstractTransientValueTestCase<?, S, Object> transCase = (AbstractTransientValueTestCase<?, S, Object>) ScenarioSource.this.testCase;
+                final AbstractTransientValueTestCase<?, S, Object> transCase =
+                        (AbstractTransientValueTestCase<?, S, Object>) ScenarioSource.this.testCase;
                 transCase.setTransientValue(key, valueCalc);
             }
         };
@@ -221,12 +228,13 @@ public class ScenarioSource<S> {
         for (final S nextCase : this.testCase.getParameter().getScenario()) {
 
             @SuppressWarnings(Constant.Warning.UNCHECKED)
-            final Enum<?> nextEnum = Enum.valueOf(this.enumType, nextCase
-                .toString()
-                .replaceAll(" ", ""));
+            final Enum<?> nextEnum =
+                    Enum.valueOf(
+                        this.enumType,
+                        nextCase.toString().replaceAll(" ", ""));
 
-            final List<CaseObserver<S>> caseObsList = this.enumObsMap
-                .get(nextEnum);
+            final List<CaseObserver<S>> caseObsList =
+                    this.enumObsMap.get(nextEnum);
 
             if (caseObsList != null) {
                 for (final CaseObserver<S> nextCaseObserver : caseObsList) {
