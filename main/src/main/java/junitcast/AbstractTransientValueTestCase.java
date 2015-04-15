@@ -23,11 +23,11 @@ import org.junit.Before;
 
 /**
  * Default implementation of TransientValue interface.
- * 
+ *
  * @param <T> Test Object instance type. subject type.
  * @param <S> data type of scenario element.
  * @param <V> transient value element type. Object is commonly used.
- * 
+ *
  * @author Royce Remulla
  */
 public abstract class AbstractTransientValueTestCase<T, S, V> extends
@@ -46,7 +46,7 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
 
     /**
      * JUnit 3 setUp().
-     * 
+     *
      * Note: transient Map is internally used thus it need to be initialized
      * immediately before other setups.
      */
@@ -87,4 +87,11 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
         this.transientMap = pTransientValue;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public String toString()
+    {
+        return this.transientMap == null ? "null" : getClass().getSimpleName()
+                + " " + this.transientMap.toString();
+    }
 }
