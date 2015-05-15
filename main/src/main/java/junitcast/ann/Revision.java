@@ -1,5 +1,5 @@
 /**
- *   Copyright 2014 Royce Remulla
+ *   Copyright 2015 Royce Remulla
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,28 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package junitcast;
+package junitcast.ann;
 
-import junitcast.ann.Revision;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- *
- * <pre>
- * @author $Author$
- * @version $Date$
- * </pre>
- *
- * @param <S> scenario parameter type. Normally String.
+ * @version $Date: 2015-04-14 16:47:19 +0800 (Tue, 14 Apr 2015) $
+ * @version $Revision: 333581 $
  */
-@Revision("$Revision: $")
-public interface CaseObserver<S> {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Revision {
 
-    /**
-     * Case specific scenario processor.
-     *
-     * @param caseRaw raw case string defined in properties file.
-     */
-    void prepareCase(S caseRaw);
-
+    String value();
 
 }

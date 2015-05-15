@@ -209,7 +209,7 @@ public class ScenarioSource<S> {
      */
     public void addObserver(final Enum<?> kaso, final CaseObserver<S> observer)
     {
-        assert observer != null;
+        assert observer != null : "You cannot have a null observer.";
 
         if (this.enumObsMap.get(kaso) == null) {
             this.enumObsMap.put(kaso, new ArrayList<CaseObserver<S>>());
