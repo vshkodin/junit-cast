@@ -26,39 +26,41 @@ public class ScenarioSourceTest {
 
     /** */
     @SuppressWarnings({ "rawtypes" })
-    private final transient ScenarioSource<String> sut = new ScenarioSource<String>(
-        new AbstractTestCase<Object, String>(null) {
+    private final transient ScenarioSource<String> sut =
+            new ScenarioSource<String>(new AbstractTestCase<Object, String>(
+                null) {
 
-            @Override
-            protected void setupTargetObject(final List constructorParams)
-            {}
+                @Override
+                protected void setupTargetObject(final List constructorParams)
+                {}
 
-            @Override
-            protected void prepare()
-            {}
+                @Override
+                protected void prepare()
+                {}
 
-            @Override
-            protected void execute()
-            {}
-        });
+                @Override
+                protected void execute()
+                {}
+            });
 
     /** */
     @SuppressWarnings({ "rawtypes" })
-    private final transient ScenarioSource<String> sutTrans = new ScenarioSource<String>(
-        new AbstractTransientValueTestCase<Object, String, Object>(null) {
+    private final transient ScenarioSource<String> sutTrans =
+            new ScenarioSource<String>(
+                new AbstractTransientValueTestCase<Object, String, Object>(null) {
 
-            @Override
-            protected void setupTargetObject(final List constructorParams)
-            {}
+                    @Override
+                    protected void setupTargetObject(final List constructorParams)
+                    {}
 
-            @Override
-            protected void prepare()
-            {}
+                    @Override
+                    protected void prepare()
+                    {}
 
-            @Override
-            protected void execute()
-            {}
-        });
+                    @Override
+                    protected void execute()
+                    {}
+                });
 
 
     /** Null Case. */
@@ -86,19 +88,17 @@ public class ScenarioSourceTest {
     @Test
     public void createNewCase_caseParserTest()
     {
-        final CaseObserver<String> caseObs = this.sutTrans.createNewCase(
-            null,
-            null,
-            new CaseParser() {
+        final CaseObserver<String> caseObs =
+                this.sutTrans.createNewCase(null, null, new CaseParser() {
 
-                @Override
-                public <E extends Enum<E>> Object parse(final E kaso)
-                {
-                    return null;
-                }
-            });
+                    @Override
+                    public <E extends Enum<E>> Object parse(final E kaso)
+                    {
+                        return null;
+                    }
+                });
 
-        caseObs.prepareCase("test");
+        caseObs.prepareCase(0, "test");
 
     }
 

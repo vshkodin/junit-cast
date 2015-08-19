@@ -32,9 +32,11 @@ public interface CaseObserver<S> {
     /**
      * Case specific scenario processor.
      *
+     * @param index scenario token index. Useful when you have similarly named
+     *            tokens.
      * @param caseRaw raw case string defined in properties file.
      */
-    void prepareCase(S caseRaw);
+    void prepareCase(int index, S caseRaw);
 
 
 }

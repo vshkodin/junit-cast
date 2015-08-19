@@ -83,8 +83,8 @@ public class RuleProcessorTest extends
     @Override
     protected void prepare()
     {
-        final RuleEvaluator<String> mockRuleEval = Mockito
-            .mock(RuleEvaluator.class);
+        final RuleEvaluator<String> mockRuleEval =
+                Mockito.mock(RuleEvaluator.class);
         Mockito
             .doReturn(mockRuleEval)
             .when(getMockSubject())
@@ -98,7 +98,7 @@ public class RuleProcessorTest extends
             new CaseObserver<String>() {
 
                 @Override
-                public void prepareCase(final String caseRaw)
+                public void prepareCase(final int index, final String caseRaw)
                 {
                     setTransientValue(
                         Trans.Scenario,
@@ -109,10 +109,10 @@ public class RuleProcessorTest extends
         scenSrc.addObserver(Variable.valid_rule, new CaseObserver<String>() {
 
             @Override
-            public void prepareCase(final String caseRaw)
+            public void prepareCase(final int index, final String caseRaw)
             {
-                final CaseFixture<String> caseFix = Mockito
-                    .mock(CaseFixture.class);
+                final CaseFixture<String> caseFix =
+                        Mockito.mock(CaseFixture.class);
                 Mockito
                     .doReturn(new Rule("Visible:!Blind"))
                     .when(caseFix)
@@ -127,7 +127,7 @@ public class RuleProcessorTest extends
             new CaseObserver<String>() {
 
                 @Override
-                public void prepareCase(final String caseRaw)
+                public void prepareCase(final int index, final String caseRaw)
                 {
                     Mockito
                         .doThrow(new RuleEvaluatorException("Mock parse error"))
@@ -141,7 +141,7 @@ public class RuleProcessorTest extends
             new CaseObserver<String>() {
 
                 @Override
-                public void prepareCase(final String caseRaw)
+                public void prepareCase(final int index, final String caseRaw)
                 {
                     Mockito
                         .doThrow(
@@ -154,7 +154,7 @@ public class RuleProcessorTest extends
         scenSrc.addObserver(Variable.evaluate_ok, new CaseObserver<String>() {
 
             @Override
-            public void prepareCase(final String caseRaw)
+            public void prepareCase(final int index, final String caseRaw)
             {
                 Mockito
                     .doReturn(true)

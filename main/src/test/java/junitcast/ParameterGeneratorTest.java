@@ -129,7 +129,7 @@ public class ParameterGeneratorTest
         source.addObserver(Variable.Init, new CaseObserver<Object>() {
 
             @Override
-            public void prepareCase(final Object caseRaw)
+            public void prepareCase(int index, final Object caseRaw)
             {
                 @SuppressWarnings("unchecked")
                 final CaseFixture<String> mockFixture = Mockito

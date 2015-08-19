@@ -82,9 +82,10 @@ public class ListMerger_getCountTest
 
         source.addObserver(Variable.list_w_null, new CaseObserver<String>() {
             @Override
-            public void prepareCase(final String caseRaw)
+            public void prepareCase(final int index, final String caseRaw)
             {
-                final List<List<String>> listWithNull = new ArrayList<List<String>>();
+                final List<List<String>> listWithNull =
+                        new ArrayList<List<String>>();
                 listWithNull.add(createList(1));
                 listWithNull.add(null);
                 setTransientValue(0, listWithNull);
@@ -95,9 +96,10 @@ public class ListMerger_getCountTest
             Variable.list_1x3_w_null,
             new CaseObserver<String>() {
                 @Override
-                public void prepareCase(final String caseRaw)
+                public void prepareCase(final int index, final String caseRaw)
                 {
-                    final List<List<String>> setWithNull = new ArrayList<List<String>>();
+                    final List<List<String>> setWithNull =
+                            new ArrayList<List<String>>();
                     setWithNull.add(createList(1));
                     setWithNull.add(new ArrayList<String>(Arrays
                         .asList(new String[] {
@@ -129,8 +131,8 @@ public class ListMerger_getCountTest
 
     private List<List<String>> createListOfSet(final String scenToken)
     {
-        final String indecesRaw = scenToken
-            .substring(scenToken.indexOf('_') + 1);
+        final String indecesRaw =
+                scenToken.substring(scenToken.indexOf('_') + 1);
         final String[] indeces = indecesRaw.split("x");
         final List<List<String>> listOfList = new ArrayList<List<String>>();
         for (final String index : indeces) {

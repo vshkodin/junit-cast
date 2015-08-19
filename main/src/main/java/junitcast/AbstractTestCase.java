@@ -68,8 +68,8 @@ public abstract class AbstractTestCase<T, E> {
     protected AbstractTestCase(final Parameter<E> pParameter) {
         this.parameter = pParameter;
         if (getClass().getGenericSuperclass() instanceof ParameterizedType) {
-            final ParameterizedType paramedType = (ParameterizedType) getClass()
-                .getGenericSuperclass();
+            final ParameterizedType paramedType =
+                    (ParameterizedType) getClass().getGenericSuperclass();
             Class<T> subjecType;
             final Type type = paramedType.getActualTypeArguments()[0];
             if (type instanceof ParameterizedType) {
@@ -88,8 +88,6 @@ public abstract class AbstractTestCase<T, E> {
     @Before
     public void setUp()
     {
-
-
         setupTargetObject(null);
     }
 
@@ -100,6 +98,7 @@ public abstract class AbstractTestCase<T, E> {
         setMockSubject(null);
         setRealSubject(null);
         setSubjectType(null);
+        setResult(null);
     }
 
 

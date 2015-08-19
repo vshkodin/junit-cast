@@ -163,7 +163,7 @@ public class ScenarioSource<S> {
         return new CaseObserver<S>() {
 
             @Override
-            public void prepareCase(final S caseRaw)
+            public void prepareCase(final int index, final S caseRaw)
             {
                 Object valueCalc;
                 if (value instanceof CaseParser) {
@@ -225,7 +225,9 @@ public class ScenarioSource<S> {
     public void notifyObservers()
     {
 
-        for (final S nextCase : this.testCase.getParameter().getScenario()) {
+        for (int i = 0; i < this.testCase.getParameter().getScenario().size(); i++) {
+            final S nextCase =
+                    this.testCase.getParameter().getScenario().get(i);
 
             @SuppressWarnings(Constant.Warning.UNCHECKED)
             final Enum<?> nextEnum =
@@ -238,7 +240,7 @@ public class ScenarioSource<S> {
 
             if (caseObsList != null) {
                 for (final CaseObserver<S> nextCaseObserver : caseObsList) {
-                    nextCaseObserver.prepareCase(nextCase);
+                    nextCaseObserver.prepareCase(i, nextCase);
                 }
             }
         }

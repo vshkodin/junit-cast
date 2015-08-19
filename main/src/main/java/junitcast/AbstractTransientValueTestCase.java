@@ -34,7 +34,7 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
         AbstractTestCase<T, S> implements TransientValue<V> {
 
     /** Case objects place holder. */
-    private transient Map<Object, V> transientMap = new HashMap<Object, V>();
+    private transient Map<Object, V> transientMap; //= new HashMap<Object, V>();
 
     /**
      * @param pParameter Data Transfer Object Parameter in Parameterized test..
@@ -54,7 +54,8 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
     @Before
     public void setUp()
     {
-        this.transientMap.clear();
+        this.transientMap = new HashMap<Object, V>();
+        //this.transientMap.clear();
         super.setUp();
     }
 
@@ -65,6 +66,7 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
     {
         super.tearDown();
         this.setTransientValue(null);
+        this.transientMap = null;
     }
 
     /** {@inheritDoc} */
