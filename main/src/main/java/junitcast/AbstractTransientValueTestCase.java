@@ -42,6 +42,7 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
      */
     public AbstractTransientValueTestCase(final Parameter<S> pParameter) {
         super(pParameter);
+        this.transientMap = new HashMap<Object, V>();
     }
 
     /**
@@ -54,8 +55,6 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
     @Before
     public void setUp()
     {
-        this.transientMap = new HashMap<Object, V>();
-        //this.transientMap.clear();
         super.setUp();
     }
 
@@ -65,8 +64,7 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
     public void tearDown()
     {
         super.tearDown();
-        this.setTransientValue(null);
-        this.transientMap = null;
+        this.setTransientMap(null);
     }
 
     /** {@inheritDoc} */
@@ -84,9 +82,9 @@ public abstract class AbstractTransientValueTestCase<T, S, V> extends
 
     }
 
-    private void setTransientValue(final Map<Object, V> pTransientValue)
+    private void setTransientMap(final Map<Object, V> pTransientMap)
     {
-        this.transientMap = pTransientValue;
+        this.transientMap = pTransientMap;
     }
 
     /** {@inheritDoc} */
