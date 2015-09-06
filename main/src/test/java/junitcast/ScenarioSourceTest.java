@@ -64,7 +64,8 @@ public class ScenarioSourceTest {
 
 
     /** Null Case. */
-    @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("unchecked")
+	@Test(expected = IllegalArgumentException.class)
     public void checkValidTestCase_nullTest()
     {
         this.sut.checkValidTestCase(null);
