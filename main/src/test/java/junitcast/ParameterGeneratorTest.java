@@ -37,7 +37,6 @@ public class ParameterGeneratorTest
         extends
         AbstractTransientValueTestCase<ParameterGenerator<String>, Object, Object> {
 
-
     /** Test artifact. */
     private static final String TEST_NEG = "NEGATIVE";
 
@@ -47,12 +46,12 @@ public class ParameterGeneratorTest
     /** Test artifact. */
     private static final String TEST_PAIR = TEST_NEG + ":" + TEST_POS;
 
-
-    /** @param pParameter Data Transfer Object Parameter in Parameterized test. */
+    /**
+     * @param pParameter Data Transfer Object Parameter in Parameterized test.
+     */
     public ParameterGeneratorTest(final Parameter<Object> pParameter) {
         super(pParameter);
     }
-
 
     /** {@inheritDoc} */
     @Override
@@ -86,7 +85,8 @@ public class ParameterGeneratorTest
     @Parameters(name = "{0}")
     public static Collection<Object[]> generateData()
     {
-        final List<CaseFixture<String>> fixTureList = new ArrayList<CaseFixture<String>>();
+        final List<CaseFixture<String>> fixTureList =
+                new ArrayList<CaseFixture<String>>();
         final List<List<String>> variables = new ArrayList<List<String>>();
 
         variables.add(new ArrayList<String>(Arrays
@@ -100,16 +100,17 @@ public class ParameterGeneratorTest
                 Variable.Match_Expected.name(),
                 Variable.Miss_Expected.name() })));
 
-        final StringBuilder ruleBuilder = new StringBuilder()
-            .append(TEST_NEG)
-            .append(':')
-            .append(Variable.Negative.name())
-            .append('&')
-            .append(Variable.Match_Expected.name())
-            .append('|')
-            .append(Variable.Positive.name())
-            .append('&')
-            .append(Variable.Miss_Expected.name());
+        final StringBuilder ruleBuilder =
+                new StringBuilder()
+                    .append(TEST_NEG)
+                    .append(':')
+                    .append(Variable.Negative.name())
+                    .append('&')
+                    .append(Variable.Match_Expected.name())
+                    .append('|')
+                    .append(Variable.Positive.name())
+                    .append('&')
+                    .append(Variable.Miss_Expected.name());
 
         fixTureList.add(new CaseFixture<String>(
             "getBinaryAction",
@@ -129,16 +130,18 @@ public class ParameterGeneratorTest
         source.addObserver(Variable.Init, new CaseObserver<Object>() {
 
             @Override
-            public void prepareCase(int index, final Object caseRaw)
+            public void prepareCase(final int index, final Object caseRaw)
             {
                 @SuppressWarnings("unchecked")
-                final CaseFixture<String> mockFixture = Mockito
-                    .mock(CaseFixture.class);
+                final CaseFixture<String> mockFixture =
+                        Mockito.mock(CaseFixture.class);
 
                 final String[] pairArr = TEST_PAIR.split(":");
-                final Map<String, String> pairMap = new HashMap<String, String>();
+                final Map<String, String> pairMap =
+                        new HashMap<String, String>();
                 pairMap.put(pairArr[0], pairArr[1]);
-                final Map<String, String> reversePairMap = new HashMap<String, String>();
+                final Map<String, String> reversePairMap =
+                        new HashMap<String, String>();
                 reversePairMap.put(pairArr[1], pairArr[0]);
 
                 Mockito.doReturn(pairMap).when(mockFixture).getPairMap();
@@ -150,13 +153,12 @@ public class ParameterGeneratorTest
             }
         });
 
-
-        //@formatter:off
-        source.addTransientCase(Trans.Output, TEST_NEG, Variable.Negative);
-        source.addTransientCase(Trans.Output, TEST_POS, Variable.Positive);
-        source.addTransientCase(Trans.Expected, true, Variable.Match_Expected);
-        source.addTransientCase(Trans.Expected, false, Variable.Miss_Expected);
-        //@formatter:on
+        // @formatter:off
+		source.addTransientCase(Trans.Output, TEST_NEG, Variable.Negative);
+		source.addTransientCase(Trans.Output, TEST_POS, Variable.Positive);
+		source.addTransientCase(Trans.Expected, true, Variable.Match_Expected);
+		source.addTransientCase(Trans.Expected, false, Variable.Miss_Expected);
+		// @formatter:on
 
         source.notifyObservers();
     }
@@ -167,7 +169,8 @@ public class ParameterGeneratorTest
     {
         final String ruleOutput = (String) getTransientValue(Trans.Output);
         @SuppressWarnings("unchecked")
-        final CaseFixture<String> fixture = (CaseFixture<String>) getTransientValue(Trans.Fixture);
+        final CaseFixture<String> fixture =
+                (CaseFixture<String>) getTransientValue(Trans.Fixture);
         final boolean expected = (Boolean) getTransientValue(Trans.Expected);
 
         setResult(getMockSubject().getBinaryOutput(

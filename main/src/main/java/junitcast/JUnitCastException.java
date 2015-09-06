@@ -22,7 +22,6 @@ package junitcast;
  * @version $Date$
  * </pre>
  */
-
 public class JUnitCastException extends RuntimeException {
 
 

@@ -53,10 +53,7 @@ public class ResourceFixture {
     private final transient List<List<List<Object>>> caseVarList =
             new ArrayList<List<List<Object>>>();
 
-    /**
-     * Cases (OAS), Variables (Value Presence, Duplication, etc), Combinations
-     * (No Value, Has Value).
-     */
+    /** */
     private final transient List<List<ElementConverter>> caseConverterList =
             new ArrayList<List<ElementConverter>>();
 
@@ -200,7 +197,7 @@ public class ResourceFixture {
     }
 
     /**
-     * Init variables.
+     * Initialize variables.
      *
      * @param resBundle resource bundle instance.
      */

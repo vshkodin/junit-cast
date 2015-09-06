@@ -43,7 +43,6 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public abstract class AbstractTestCase<T, E> {
 
-
     /** Parameterized runner composite parameter. */
     private final transient Parameter<E> parameter;
 
@@ -101,14 +100,12 @@ public abstract class AbstractTestCase<T, E> {
         setResult(null);
     }
 
-
     /**
      * Setup the test object instance. Override this for custom implementation.
      *
      * @param constructorParams test subject constructor parameters.
      */
     protected abstract void setupTargetObject(List<Object> constructorParams);
-
 
     /** Preparation. */
     protected abstract void prepare();
@@ -145,13 +142,13 @@ public abstract class AbstractTestCase<T, E> {
     @Test
     public void cast()
     {
-        //Preparation.
+        // Preparation.
         prepare();
 
-        //Execution.
+        // Execution.
         execute();
 
-        //Assertion/Verification.
+        // Assertion/Verification.
         assertVerify(getResult());
     }
 
