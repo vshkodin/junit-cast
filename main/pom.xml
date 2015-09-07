@@ -3,25 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ph.rye</groupId>
 	<artifactId>junit-cast</artifactId>
-	<version>0.6-BETA-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-	<distributionManagement>
-		<repository>
-			<id>internal</id>
-			<name>Internal Release Repository</name>
-			<url>http://dhdc014:8888/repository/internal/</url>
-		</repository>
-
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshot Repository</name>
-			<url>http://dhdc014:8888/repository/snapshots/</url>
-		</snapshotRepository>
-
-	</distributionManagement>
 
 	<build>
 		<testResources>
