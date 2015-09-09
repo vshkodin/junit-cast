@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import junitcast.ann.Revision;
 import junitcast.util.Constant;
 
 /**
@@ -33,11 +34,8 @@ import junitcast.util.Constant;
  * @param <S> data type of scenario element. Use object if scenario contain
  *            multiple types.
  */
+@Revision("$Revision: $")
 public class ScenarioSource<S> {
-
-
-    /** Internal source control version. */
-    public static final String RCS_ID = "$Revision$";
 
 
     /** */
@@ -60,10 +58,22 @@ public class ScenarioSource<S> {
      */
     public ScenarioSource(final AbstractTestCase<?, S> pTestCase) {
 
+        this(pTestCase, pTestCase);
+    }
+
+    /**
+     * By convention, accessible Variable enum defined on the test class.
+     *
+     * @param pTestCase the test class usually "this". Not null.
+     */
+    public ScenarioSource(final AbstractTestCase<?, S> pTestCase,
+            final Object pVarSource) {
+
         assert pTestCase != null;
 
         this.testCase = pTestCase;
-        this.enumType = findVariableEnum(pTestCase);
+        this.enumType =
+                findVariableEnum(pVarSource == null ? pTestCase : pVarSource);
     }
 
 
@@ -74,11 +84,11 @@ public class ScenarioSource<S> {
      * @return null when Variable enum is not found.
      */
     @SuppressWarnings(Constant.Warning.UNCHECKED)
-    Class<? extends Enum<?>> findVariableEnum(final AbstractTestCase<?, S> pTestCase)
+    Class<? extends Enum<?>> findVariableEnum(final Object pVarSource)
     {
 
         Class<? extends Enum<?>> retval = null; //NOPMD: null default, conditionally redefine.
-        for (final Class<?> innerClass : pTestCase
+        for (final Class<?> innerClass : pVarSource
             .getClass()
             .getDeclaredClasses()) {
             if (innerClass.getSimpleName().startsWith("Var")) {
