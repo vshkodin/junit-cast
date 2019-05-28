@@ -20,25 +20,20 @@ package junitcast.example;
  */
 public class SimpleDivider {
 
-    /** */
-    private static final double EPSILON = 1.11e-16;
-
     /**
-     * Disallow 0 divisor. Return quotient.
+     * Return quotient. Return 0 for -0 result.
      * 
      * @param dividend any integer from Integer.MIN_VALUE to Integer.MAX_VALUE.
      * @param divisor must not be 0.
+     * @throws Illegal argument exception when 0 divisor is passed.
      */
     public double divide(final int dividend, final int divisor)
     {
         if (divisor == 0) {
             throw new IllegalArgumentException("Invalid divisor.");
-        } else {
-            double retval = (double) dividend / (double) divisor;
-            if (Math.abs(retval) < EPSILON) { //prevent negative zero.
-                retval = 0.0;
-            }
-            return retval;
-        }
+        }         
+        double retval = (double) dividend / (double) divisor;
+        if (retval == -0) return 0;
+        return retval;
     }
 }

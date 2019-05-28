@@ -1,0 +1,30 @@
+test:
+  description: Simple Divide Typed Test
+  scenarios:
+    scenario:
+      name: Dividend
+      tokens:
+        - -2
+        - -1
+        - 0
+        - 1
+        - 2
+      converter: junitcast.converter.IntConverter
+    scenario:
+      name: Divisor
+      tokens:
+        - -2
+        - -1
+        - 0
+        - 1
+        - 2
+      converter: junitcast.converter.IntConverter
+  outcomes:
+    ERROR: 0[1]
+    '0.0':  0[0] & !0[1]
+    '-2.0': -2[0] & 1[1] | 2[0] & -1[1]
+    '-1.0': -2[0] &  2[1] | 2[0] & -2[1] | -1[0] & 1[1] | 1[0] & -1[1]
+    '-0.5': -1[0] &  2[1] | 1[0] & -2[1]
+    '0.5':  1[0] &  2[1] | -1[0] & -2[1]
+    '1.0': -2[0] & -2[1] | 2[0] &  2[1] | -1[0] & -1[1] | 1[0] & 1[1]
+    '2.0':  2[0] &  1[1] | -2[0] & -1[1]

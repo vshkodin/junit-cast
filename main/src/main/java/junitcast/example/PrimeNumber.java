@@ -32,6 +32,8 @@ public class PrimeNumber {
         boolean primeYes = true; //NOPMD: true default, conditionally redefine.
         if (input <= 0) {
             throw new IllegalArgumentException("Invalid number: " + input);
+        } else if (input == 1) {
+        		primeYes = false;
         } else if (input > 2) {
 
             for (int i = 2; i < input; i++) {

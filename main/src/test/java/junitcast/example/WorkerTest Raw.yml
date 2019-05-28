@@ -1,0 +1,17 @@
+test:
+  description: Has Work
+  scenarios:
+    - Day Type:
+      - Holiday
+      - Regular day
+    - Day of Week:
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+  outcomes:
+    'true': Regular day&!(Saturday|Sunday)
+    'false': Is Holiday|Sunday
